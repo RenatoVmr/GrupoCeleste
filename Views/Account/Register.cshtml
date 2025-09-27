@@ -1,0 +1,72 @@
+@model GrupoCeleste.Models.ViewModels.RegistroViewModel
+
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<div class="auth-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="auth-card fade-in-up">
+                <div class="auth-header">
+                    <div class="auth-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h2 class="auth-title">¡Únete a GrupoCeleste!</h2>
+                    <p class="auth-subtitle">Crea tu cuenta y descubre el mundo del cine</p>
+                </div>
+                
+                <form asp-action="Register" method="post" class="auth-form">
+                    <div asp-validation-summary="All" class="alert alert-danger" style="display: none;"></div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-4">
+                                <input asp-for="Nombre" class="form-control form-control-modern" id="floatingNombre" placeholder="Nombre" />
+                                <label for="floatingNombre"><i class="fas fa-user me-2"></i>Nombre</label>
+                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-4">
+                                <input asp-for="Apellido" class="form-control form-control-modern" id="floatingApellido" placeholder="Apellido" />
+                                <label for="floatingApellido"><i class="fas fa-user me-2"></i>Apellido</label>
+                                <span asp-validation-for="Apellido" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-floating mb-4">
+                        <input asp-for="Email" class="form-control form-control-modern" id="floatingEmail" placeholder="correo@ejemplo.com" />
+                        <label for="floatingEmail"><i class="fas fa-envelope me-2"></i>Correo Electrónico</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-floating mb-4">
+                        <input asp-for="Password" class="form-control form-control-modern" id="floatingPassword" placeholder="Contraseña" />
+                        <label for="floatingPassword"><i class="fas fa-lock me-2"></i>Contraseña</label>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-floating mb-4">
+                        <input asp-for="ConfirmarPassword" class="form-control form-control-modern" id="floatingConfirmPassword" placeholder="Confirmar Contraseña" />
+                        <label for="floatingConfirmPassword"><i class="fas fa-lock me-2"></i>Confirmar Contraseña</label>
+                        <span asp-validation-for="ConfirmarPassword" class="text-danger"></span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success btn-modern w-100 mb-4">
+                        <i class="fas fa-user-plus me-2"></i>Crear Cuenta
+                    </button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>¿Ya tienes una cuenta? <a asp-action="Login" class="auth-link">Inicia Sesión</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

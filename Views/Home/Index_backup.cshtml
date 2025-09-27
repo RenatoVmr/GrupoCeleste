@@ -1,0 +1,164 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="hero-section text-center fade-in-up">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="display-2 mb-4" style="font-weight: 800;">
+                        <i class="fas fa-film me-3"></i>GrupoCeleste
+                    </h1>
+                    <p class="lead fs-4 mb-4" style="font-weight: 300; line-height: 1.6;">
+                        Descubre, explora y disfruta de las mejores películas en nuestra plataforma cinematográfica
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mt-5">
+                        <a class="btn btn-light btn-lg px-5 py-3" asp-controller="Peliculas" asp-action="Index" style="font-weight: 600; border-radius: 2rem;">
+                            <i class="fas fa-play me-2"></i>Explorar Catálogo
+                        </a>
+                        @if (!User.Identity!.IsAuthenticated)
+                        {
+                            <a class="btn btn-outline-light btn-lg px-5 py-3" asp-controller="Account" asp-action="Register" style="font-weight: 600; border-radius: 2rem; border: 2px solid white;">
+                                <i class="fas fa-star me-2"></i>Únete Gratis
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container my-5">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="display-5 fw-bold mb-3" style="color: var(--dark-color);">
+                    Experiencia Cinematográfica Única
+                </h2>
+                <p class="lead text-muted">
+                    Descubre todas las funcionalidades que hacen de GrupoCeleste tu destino favorito para el cine
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 text-center border-0">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-4">
+                            <div class="icon-circle mx-auto d-flex align-items-center justify-content-center" 
+                                 style="width: 80px; height: 80px; background: var(--gradient-primary); border-radius: 50%; color: white;">
+                                <i class="fas fa-search fa-2x"></i>
+                            </div>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3" style="color: var(--dark-color);">Búsqueda Inteligente</h5>
+                        <p class="card-text text-muted">
+                            Sistema avanzado de filtros por género, director, año, calificación y más. 
+                            Encuentra exactamente lo que buscas en segundos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 text-center border-0">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-4">
+                            <div class="icon-circle mx-auto d-flex align-items-center justify-content-center" 
+                                 style="width: 80px; height: 80px; background: var(--gradient-accent); border-radius: 50%; color: white;">
+                                <i class="fas fa-info-circle fa-2x"></i>
+                            </div>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3" style="color: var(--dark-color);">Detalles Completos</h5>
+                        <p class="card-text text-muted">
+                            Información detallada de cada película: sinopsis, reparto estelar, 
+                            trailers exclusivos y calificaciones de la comunidad.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100 text-center border-0">
+                    <div class="card-body p-4">
+                        <div class="feature-icon mb-4">
+                            <div class="icon-circle mx-auto d-flex align-items-center justify-content-center" 
+                                 style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--warning-color) 0%, #fbbf24 100%); border-radius: 50%; color: white;">
+                                <i class="fas fa-heart fa-2x"></i>
+                            </div>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3" style="color: var(--dark-color);">Comunidad Activa</h5>
+                        <p class="card-text text-muted">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <text>Contribuye agregando nuevas películas y comparte tus descubrimientos cinematográficos con la comunidad.</text>
+                            }
+                            else
+                            {
+                                <text>Únete a nuestra comunidad para agregar películas, crear listas personalizadas y más.</text>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="alert alert-info border-0 text-center py-5" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-radius: 2rem;">
+                        <div class="mb-4">
+                            <i class="fas fa-rocket fa-4x" style="color: var(--primary-color);"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3" style="color: var(--dark-color);">¡Comienza Tu Aventura Cinematográfica!</h3>
+                        <p class="lead text-muted mb-4">
+                            Únete a miles de cinéfilos que ya disfrutan de nuestra plataforma. 
+                            Acceso completo, funciones premium y una experiencia sin igual.
+                        </p>
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                            <a href="@Url.Action("Register", "Account")" class="btn btn-primary btn-lg px-5">
+                                <i class="fas fa-user-plus me-2"></i> Crear Cuenta Gratis
+                            </a>
+                            <a href="@Url.Action("Login", "Account")" class="btn btn-outline-primary btn-lg px-5">
+                                <i class="fas fa-sign-in-alt me-2"></i> Ya Tengo Cuenta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="alert alert-success border-0 text-center py-5" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%); border-radius: 2rem;">
+                        <div class="mb-4">
+                            <i class="fas fa-hand-sparkles fa-4x" style="color: var(--success-color);"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3" style="color: var(--dark-color);">¡Hola de nuevo, cinéfilo!</h3>
+                        <p class="lead text-muted mb-4">
+                            Tu próxima gran película te está esperando. Explora, descubre y disfruta 
+                            de nuestra creciente colección cinematográfica.
+                        </p>
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                            <a href="@Url.Action("Index", "Peliculas")" class="btn btn-success btn-lg px-5">
+                                <i class="fas fa-play me-2"></i> Explorar Películas
+                            </a>
+                            <a href="@Url.Action("Create", "Peliculas")" class="btn btn-outline-success btn-lg px-5">
+                                <i class="fas fa-plus me-2"></i> Agregar Película
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

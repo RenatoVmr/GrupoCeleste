@@ -1,0 +1,58 @@
+@model GrupoCeleste.Models.Pelicula
+
+@{
+    ViewData["Title"] = "Eliminar Película";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h2>@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>¿Estás seguro de que quieres eliminar esta película?</strong>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            @if (!string.IsNullOrEmpty(Model.ImagenUrl))
+                            {
+                                <img src="@Model.ImagenUrl" class="img-fluid rounded" alt="@Model.Titulo">
+                            }
+                            else
+                            {
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="fas fa-film fa-3x text-muted"></i>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <h4>@Model.Titulo</h4>
+                            <p><strong>Director:</strong> @Model.Director</p>
+                            <p><strong>Año:</strong> @Model.AnioLanzamiento</p>
+                            <p><strong>Género:</strong> @Model.Genero</p>
+                            <p><strong>Calificación:</strong> @Model.Calificacion.ToString("F1")/10</p>
+                            <p>@Model.Descripcion</p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Sí, Eliminar
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Cancelar
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

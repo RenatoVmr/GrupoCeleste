@@ -1,0 +1,130 @@
+@model GrupoCeleste.Models.Pelicula
+
+@{
+    ViewData["Title"] = "Nueva Película";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h2>@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Titulo" class="form-label"></label>
+                                    <input asp-for="Titulo" class="form-control" />
+                                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Director" class="form-label"></label>
+                                    <input asp-for="Director" class="form-control" />
+                                    <span asp-validation-for="Director" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Descripcion" class="form-label"></label>
+                            <textarea asp-for="Descripcion" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Descripcion" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Genero" class="form-label"></label>
+                                    <select asp-for="Genero" class="form-select">
+                                        <option value="">Seleccionar género</option>
+                                        <option value="Acción">Acción</option>
+                                        <option value="Aventura">Aventura</option>
+                                        <option value="Comedia">Comedia</option>
+                                        <option value="Drama">Drama</option>
+                                        <option value="Terror">Terror</option>
+                                        <option value="Romance">Romance</option>
+                                        <option value="Ciencia Ficción">Ciencia Ficción</option>
+                                        <option value="Suspense">Suspense</option>
+                                        <option value="Fantasía">Fantasía</option>
+                                        <option value="Animación">Animación</option>
+                                        <option value="Documental">Documental</option>
+                                        <option value="Musical">Musical</option>
+                                    </select>
+                                    <span asp-validation-for="Genero" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="AnioLanzamiento" class="form-label">Año de Lanzamiento</label>
+                                    <input asp-for="AnioLanzamiento" class="form-control" type="number" min="1895" max="@DateTime.Now.Year" />
+                                    <span asp-validation-for="AnioLanzamiento" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="DuracionMinutos" class="form-label">Duración (minutos)</label>
+                                    <input asp-for="DuracionMinutos" class="form-control" type="number" min="1" max="300" />
+                                    <span asp-validation-for="DuracionMinutos" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Calificacion" class="form-label">Calificación (0-10)</label>
+                                    <input asp-for="Calificacion" class="form-control" type="number" min="0" max="10" step="0.1" />
+                                    <span asp-validation-for="Calificacion" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Actores" class="form-label">Actores Principales</label>
+                                    <input asp-for="Actores" class="form-control" placeholder="Separados por comas" />
+                                    <span asp-validation-for="Actores" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ImagenUrl" class="form-label">URL de la Imagen</label>
+                                    <input asp-for="ImagenUrl" class="form-control" type="url" />
+                                    <span asp-validation-for="ImagenUrl" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="TrailerUrl" class="form-label">URL del Trailer</label>
+                                    <input asp-for="TrailerUrl" class="form-control" type="url" />
+                                    <span asp-validation-for="TrailerUrl" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Crear Película
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

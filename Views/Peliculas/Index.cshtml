@@ -1,0 +1,271 @@
+@model GrupoCeleste.Models.ViewModels.PeliculasViewModel
+
+@{
+    ViewData["Title"] = "Películas";
+}
+
+<div class="container-fluid">
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-4">
+            <!-- Panel de Filtros -->
+            <div class="filters-sidebar">
+                <div class="filter-title">
+                    <i class="fas fa-sliders-h text-primary"></i>
+                    <span>Filtros Avanzados</span>
+                </div>
+                <div class="filter-content">
+                    <form method="get" asp-action="Index" id="filtrosForm">
+                        <div class="mb-3">
+                            <label for="busquedaTitulo" class="form-label">Buscar</label>
+                            <input type="text" class="form-control" id="busquedaTitulo" name="busquedaTitulo" 
+                                   value="@Model.BusquedaTitulo" placeholder="Título o descripción">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="generoSeleccionado" class="form-label">Género</label>
+                            <select class="form-select" id="generoSeleccionado" name="generoSeleccionado">
+                                <option value="">Todos los géneros</option>
+                                @foreach (var genero in Model.GenerosDisponibles)
+                                {
+                                    <option value="@genero" selected="@(genero == Model.GeneroSeleccionado)">@genero</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="directorSeleccionado" class="form-label">Director</label>
+                            <select class="form-select" id="directorSeleccionado" name="directorSeleccionado">
+                                <option value="">Todos los directores</option>
+                                @foreach (var director in Model.DirectoresDisponibles)
+                                {
+                                    <option value="@director" selected="@(director == Model.DirectorSeleccionado)">@director</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="anioDesde" class="form-label">Año desde</label>
+                                <input type="number" class="form-control" id="anioDesde" name="anioDesde" 
+                                       value="@Model.AnioDesde" min="1895" max="@DateTime.Now.Year">
+                            </div>
+                            <div class="col-6">
+                                <label for="anioHasta" class="form-label">Año hasta</label>
+                                <input type="number" class="form-control" id="anioHasta" name="anioHasta" 
+                                       value="@Model.AnioHasta" min="1895" max="@DateTime.Now.Year">
+                            </div>
+                        </div>
+
+                        <div class="mb-3 mt-3">
+                            <label for="calificacionMinima" class="form-label">
+                                Calificación mínima: <span id="calificacionValor">@(Model.CalificacionMinima ?? 0)</span>
+                            </label>
+                            <input type="range" class="form-range" id="calificacionMinima" name="calificacionMinima" 
+                                   value="@(Model.CalificacionMinima ?? 0)" min="0" max="10" step="0.1"
+                                   oninput="document.getElementById('calificacionValor').textContent = this.value">
+                        </div>
+
+                        <input type="hidden" name="ordenarPor" value="@Model.OrdenarPor">
+                        <input type="hidden" name="ordenDescendente" value="@Model.OrdenDescendente">
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search me-2"></i>Aplicar Filtros
+                            </button>
+                            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                                <i class="fas fa-undo me-2"></i>Limpiar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-md-8">
+            <!-- Header del catálogo -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="h3 mb-1">
+                        <i class="fas fa-film text-primary me-2"></i>Catálogo de Películas
+                    </h2>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-search me-1"></i>@Model.TotalPeliculas película@(Model.TotalPeliculas != 1 ? "s" : "") encontrada@(Model.TotalPeliculas != 1 ? "s" : "")
+                    </p>
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="Create" class="btn btn-success">
+                        <i class="fas fa-plus me-1"></i> Nueva Película
+                    </a>
+                }
+            </div>
+
+            <!-- Controles de ordenamiento -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <select class="form-select" onchange="cambiarOrden(this.value)">
+                        <option value="Titulo" selected="@(Model.OrdenarPor == "Titulo")">Ordenar por Título</option>
+                        <option value="Anio" selected="@(Model.OrdenarPor == "Anio")">Ordenar por Año</option>
+                        <option value="Calificacion" selected="@(Model.OrdenarPor == "Calificacion")">Ordenar por Calificación</option>
+                        <option value="Director" selected="@(Model.OrdenarPor == "Director")">Ordenar por Director</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-outline-secondary" onclick="cambiarDireccion()">
+                        @if (Model.OrdenDescendente)
+                        {
+                            <text><i class="fas fa-sort-amount-down me-1"></i> Descendente</text>
+                        }
+                        else
+                        {
+                            <text><i class="fas fa-sort-amount-up me-1"></i> Ascendente</text>
+                        }
+                    </button>
+                </div>
+            </div>
+
+            <!-- Catálogo de Películas -->
+            <div class="row g-4">
+                @foreach (var pelicula in Model.Peliculas)
+                {
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="movie-card h-100">
+                            <div class="movie-poster-container">
+                                <img src="@pelicula.ImagenUrl" 
+                                     class="movie-poster" 
+                                     alt="@pelicula.Titulo"
+                                     onerror="this.src='https://via.placeholder.com/300x450/6366f1/ffffff?text=Sin+Imagen';">
+                                
+                                <!-- Rating Badge -->
+                                <div class="rating-badge">
+                                    <i class="fas fa-star"></i> @pelicula.Calificacion.ToString("F1")
+                                </div>
+                                
+                                <!-- Género Badge -->
+                                <div class="genre-badge">
+                                    @pelicula.Genero
+                                </div>
+                            </div>
+                            
+                            <div class="movie-info">
+                                <h5 class="movie-title">@pelicula.Titulo</h5>
+                                <div class="movie-meta">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <i class="fas fa-video text-muted me-1"></i>
+                                        <small class="text-muted">@pelicula.Director</small>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <span class="badge bg-info">
+                                            <i class="fas fa-calendar me-1"></i>@pelicula.AnioLanzamiento
+                                        </span>
+                                        <span class="badge bg-secondary">
+                                            <i class="fas fa-clock me-1"></i>@pelicula.DuracionMinutos min
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <p class="movie-description">
+                                    @(pelicula.Descripcion.Length > 100 ? pelicula.Descripcion.Substring(0, 100) + "..." : pelicula.Descripcion)
+                                </p>
+                                
+                                <div class="movie-actions mt-auto">
+                                    <a asp-action="Details" asp-route-id="@pelicula.Id" class="btn btn-primary w-100">
+                                        <i class="fas fa-play me-1"></i> Ver Detalles
+                                    </a>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <div class="btn-group w-100 mt-2">
+                                            <a asp-action="Edit" asp-route-id="@pelicula.Id" class="btn btn-outline-warning btn-sm">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@pelicula.Id" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Eliminar
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Paginación -->
+            @if (Model.TotalPaginas > 1)
+            {
+                <nav aria-label="Navegación de páginas" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        @if (Model.PaginaActual > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("Index", new {
+                                    pagina = Model.PaginaActual - 1,
+                                    busquedaTitulo = Model.BusquedaTitulo,
+                                    generoSeleccionado = Model.GeneroSeleccionado,
+                                    directorSeleccionado = Model.DirectorSeleccionado,
+                                    anioDesde = Model.AnioDesde,
+                                    anioHasta = Model.AnioHasta,
+                                    calificacionMinima = Model.CalificacionMinima,
+                                    ordenarPor = Model.OrdenarPor,
+                                    ordenDescendente = Model.OrdenDescendente
+                                })">Anterior</a>
+                            </li>
+                        }
+
+                        @for (int i = Math.Max(1, Model.PaginaActual - 2); i <= Math.Min(Model.TotalPaginas, Model.PaginaActual + 2); i++)
+                        {
+                            <li class="page-item @(i == Model.PaginaActual ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new {
+                                    pagina = i,
+                                    busquedaTitulo = Model.BusquedaTitulo,
+                                    generoSeleccionado = Model.GeneroSeleccionado,
+                                    directorSeleccionado = Model.DirectorSeleccionado,
+                                    anioDesde = Model.AnioDesde,
+                                    anioHasta = Model.AnioHasta,
+                                    calificacionMinima = Model.CalificacionMinima,
+                                    ordenarPor = Model.OrdenarPor,
+                                    ordenDescendente = Model.OrdenDescendente
+                                })">@i</a>
+                            </li>
+                        }
+
+                        @if (Model.PaginaActual < Model.TotalPaginas)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("Index", new {
+                                    pagina = Model.PaginaActual + 1,
+                                    busquedaTitulo = Model.BusquedaTitulo,
+                                    generoSeleccionado = Model.GeneroSeleccionado,
+                                    directorSeleccionado = Model.DirectorSeleccionado,
+                                    anioDesde = Model.AnioDesde,
+                                    anioHasta = Model.AnioHasta,
+                                    calificacionMinima = Model.CalificacionMinima,
+                                    ordenarPor = Model.OrdenarPor,
+                                    ordenDescendente = Model.OrdenDescendente
+                                })">Siguiente</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function cambiarOrden(nuevoOrden) {
+            const form = document.getElementById('filtrosForm');
+            const ordenarPorInput = form.querySelector('input[name="ordenarPor"]');
+            ordenarPorInput.value = nuevoOrden;
+            form.submit();
+        }
+
+        function cambiarDireccion() {
+            const form = document.getElementById('filtrosForm');
+            const ordenDescendenteInput = form.querySelector('input[name="ordenDescendente"]');
+            ordenDescendenteInput.value = ordenDescendenteInput.value === 'True' ? 'False' : 'True';
+            form.submit();
+        }
+    </script>
+}
