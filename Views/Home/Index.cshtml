@@ -1,0 +1,106 @@
+﻿@model IEnumerable<GrupoCeleste.Models.Pelicula>
+
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1><i class="fas fa-film"></i> Bienvenido a CineVerse</h1>
+        <p>Tu universo cinematográfico. Descubre, explora y disfruta las mejores películas.</p>
+        <div class="mt-4">
+            <a asp-controller="Peliculas" asp-action="Index" class="btn btn-danger btn-lg">
+                <i class="fas fa-play"></i> Explorar Películas
+            </a>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-user-plus"></i> Únete Ahora
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Movies -->
+<section class="container my-5">
+    <h2 class="section-title">
+        <i class="fas fa-star"></i> Películas Destacadas
+    </h2>
+    <div class="row g-4 mt-3">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var pelicula in Model.Take(4))
+            {
+                <div class="col-md-6 col-lg-3">
+                    <div class="movie-card">
+                        <img src="@pelicula.ImagenUrl" alt="@pelicula.Titulo" />
+                        <div class="movie-card-body">
+                            <h5>@pelicula.Titulo</h5>
+                            <p class="movie-genre">
+                                <i class="fas fa-tag"></i> @pelicula.Genero
+                            </p>
+                            <p>@pelicula.Descripcion.Substring(0, Math.Min(80, pelicula.Descripcion.Length))...</p>
+                            <div class="movie-rating">
+                                <i class="fas fa-star"></i>
+                                <span>@pelicula.Calificacion</span>
+                            </div>
+                            <a asp-controller="Peliculas" asp-action="Details" asp-route-id="@pelicula.Id" class="btn btn-danger btn-sm mt-3 w-100">
+                                <i class="fas fa-info-circle"></i> Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <p class="text-center">No hay películas disponibles en este momento.</p>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Genres Section -->
+<section class="container my-5">
+    <h2 class="section-title">
+        <i class="fas fa-th"></i> Explora por Género
+    </h2>
+    <div class="row g-4 mt-3">
+        <div class="col-md-4 col-lg-2">
+            <div class="genre-card">
+                <i class="fas fa-fist-raised"></i>
+                <h5>Acción</h5>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+            <div class="genre-card">
+                <i class="fas fa-theater-masks"></i>
+                <h5>Drama</h5>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+            <div class="genre-card">
+                <i class="fas fa-laugh"></i>
+                <h5>Comedia</h5>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+            <div class="genre-card">
+                <i class="fas fa-ghost"></i>
+                <h5>Terror</h5>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+            <div class="genre-card">
+                <i class="fas fa-heart"></i>
+                <h5>Romance</h5>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+            <div class="genre-card">
+                <i class="fas fa-rocket"></i>
+                <h5>Sci-Fi</h5>
+            </div>
+        </div>
+    </div>
+</section>

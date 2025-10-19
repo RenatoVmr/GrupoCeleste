@@ -1,0 +1,316 @@
+/* ===== CineVerse - Tema Negro y Rojo ===== */
+:root {
+    --primary-black: #0a0a0a;
+    --secondary-black: #1a1a1a;
+    --tertiary-black: #2a2a2a;
+    --primary-red: #dc2626;
+    --hover-red: #991b1b;
+    --accent-red: #ef4444;
+    --text-gray: #d1d5db;
+    --text-light-gray: #9ca3af;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: var(--primary-black);
+    color: var(--text-gray);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+    background-color: var(--secondary-black) !important;
+    border-bottom: 2px solid var(--primary-red);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    color: var(--primary-red) !important;
+    font-weight: bold;
+    font-size: 1.8rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: var(--accent-red) !important;
+    transform: scale(1.05);
+}
+
+.navbar-brand i {
+    margin-right: 0.5rem;
+}
+
+.nav-link {
+    color: var(--text-gray) !important;
+    font-weight: 500;
+    margin: 0 0.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: var(--primary-red) !important;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-red);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 80%;
+}
+
+.btn-outline-danger {
+    border-color: var(--primary-red);
+    color: var(--primary-red);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--primary-red);
+    border-color: var(--primary-red);
+    color: white;
+}
+
+/* ===== Hero Section ===== */
+.hero-section {
+    background: linear-gradient(135deg, var(--secondary-black) 0%, var(--primary-black) 100%);
+    padding: 4rem 0;
+    text-align: center;
+    border-bottom: 3px solid var(--primary-red);
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+}
+
+.hero-section p {
+    font-size: 1.3rem;
+    color: var(--text-light-gray);
+    margin-bottom: 2rem;
+}
+
+.hero-section .btn {
+    margin: 0 0.5rem;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.btn-danger {
+    background-color: var(--primary-red);
+    border-color: var(--primary-red);
+}
+
+.btn-danger:hover {
+    background-color: var(--hover-red);
+    border-color: var(--hover-red);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+}
+
+.btn-outline-light:hover {
+    background-color: white;
+    color: var(--primary-black);
+    transform: translateY(-2px);
+}
+
+/* ===== Movie Cards ===== */
+.movie-card {
+    background-color: var(--secondary-black);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    height: 100%;
+}
+
+.movie-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-red);
+    box-shadow: 0 15px 30px rgba(220, 38, 38, 0.4);
+}
+
+.movie-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.movie-card:hover img {
+    transform: scale(1.05);
+}
+
+.movie-card-body {
+    padding: 1.5rem;
+}
+
+.movie-card-body h5 {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.movie-genre {
+    color: var(--primary-red);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.movie-card-body p {
+    color: var(--text-light-gray);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.movie-rating {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.movie-rating i {
+    color: #fbbf24;
+    margin-right: 0.5rem;
+}
+
+.movie-rating span {
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* ===== Genre Grid ===== */
+.genre-card {
+    background: linear-gradient(135deg, var(--secondary-black) 0%, var(--tertiary-black) 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.genre-card:hover {
+    border-color: var(--primary-red);
+    transform: translateY(-5px);
+    background: linear-gradient(135deg, var(--tertiary-black) 0%, var(--primary-red) 100%);
+}
+
+.genre-card i {
+    font-size: 3rem;
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.genre-card:hover i {
+    color: white;
+    transform: scale(1.2);
+}
+
+.genre-card h5 {
+    color: white;
+    font-weight: bold;
+}
+
+/* ===== Sections ===== */
+.section-title {
+    color: white;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60%;
+    height: 3px;
+    background-color: var(--primary-red);
+}
+
+/* ===== Footer ===== */
+.footer {
+    background-color: var(--secondary-black);
+    border-top: 2px solid var(--primary-red);
+    padding: 1.5rem 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer p {
+    margin: 0;
+    color: var(--text-light-gray);
+}
+
+/* ===== Forms ===== */
+.form-control {
+    background-color: var(--tertiary-black);
+    border: 1px solid var(--text-light-gray);
+    color: white;
+}
+
+.form-control:focus {
+    background-color: var(--tertiary-black);
+    border-color: var(--primary-red);
+    color: white;
+    box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25);
+}
+
+.form-label {
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+/* ===== Utilities ===== */
+.text-danger {
+    color: var(--primary-red) !important;
+}
+
+a {
+    color: var(--primary-red);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-red);
+}
