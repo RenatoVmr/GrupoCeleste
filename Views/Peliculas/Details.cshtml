@@ -1,0 +1,109 @@
+@model GrupoCeleste.Models.Pelicula
+
+@{
+    ViewData["Title"] = Model.Titulo;
+}
+
+<div class="container my-5">
+    <!-- Botón de Regreso -->
+    <div class="mb-4">
+        <a asp-action="Index" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left"></i> Volver al Catálogo
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Póster de la Película -->
+        <div class="col-md-4 mb-4">
+            <div class="movie-card">
+                <img src="@Model.ImagenUrl" alt="@Model.Titulo" class="w-100" style="height: auto; border-radius: 12px;" onerror="this.src='https://via.placeholder.com/500x750?text=Sin+Imagen'" />
+            </div>
+        </div>
+
+        <!-- Información de la Película -->
+        <div class="col-md-8">
+            <div style="background-color: var(--secondary-black); padding: 2rem; border-radius: 12px; border: 2px solid var(--primary-red);">
+                <h1 style="color: white; font-weight: bold; margin-bottom: 1rem;">
+                    @Model.Titulo
+                </h1>
+
+                <div class="mb-3">
+                    <span class="badge" style="background-color: var(--primary-red); font-size: 1rem; padding: 0.5rem 1rem;">
+                        <i class="fas fa-tag"></i> @Model.Genero
+                    </span>
+                </div>
+
+                <div class="movie-rating mb-4" style="font-size: 1.5rem;">
+                    <i class="fas fa-star"></i>
+                    <span style="font-weight: bold;">@Model.Calificacion</span>
+                    <small style="color: var(--text-light-gray);">/ 10</small>
+                </div>
+
+                <div class="mb-4">
+                    <h5 style="color: var(--primary-red); font-weight: bold;">
+                        <i class="fas fa-align-left"></i> Descripción
+                    </h5>
+                    <p style="color: var(--text-gray); line-height: 1.8;">
+                        @Model.Descripcion
+                    </p>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color: var(--primary-red); font-weight: bold;">
+                            <i class="fas fa-user-tie"></i> Director
+                        </h6>
+                        <p style="color: var(--text-gray);">@Model.Director</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 style="color: var(--primary-red); font-weight: bold;">
+                            <i class="fas fa-users"></i> Actores
+                        </h6>
+                        <p style="color: var(--text-gray);">@Model.Actores</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 mb-3">
+                        <h6 style="color: var(--primary-red); font-weight: bold;">
+                            <i class="fas fa-calendar-alt"></i> Año
+                        </h6>
+                        <p style="color: var(--text-gray);">@Model.AnioLanzamiento</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h6 style="color: var(--primary-red); font-weight: bold;">
+                            <i class="fas fa-clock"></i> Duración
+                        </h6>
+                        <p style="color: var(--text-gray);">@Model.DuracionMinutos minutos</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <h6 style="color: var(--primary-red); font-weight: bold;">
+                            <i class="fas fa-star"></i> Calificación
+                        </h6>
+                        <p style="color: var(--text-gray);">@Model.Calificacion / 10</p>
+                    </div>
+                </div>
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="mt-4">
+                        <button class="btn btn-danger me-2">
+                            <i class="fas fa-heart"></i> Agregar a Favoritos
+                        </button>
+                        <button class="btn btn-outline-danger">
+                            <i class="fas fa-star"></i> Calificar
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info mt-4" style="background-color: var(--tertiary-black); border-color: var(--primary-red); color: var(--text-gray);">
+                        <i class="fas fa-info-circle"></i> 
+                        <a asp-controller="Account" asp-action="Login" style="color: var(--primary-red); font-weight: bold;">Inicia sesión</a> 
+                        para agregar a favoritos y calificar esta película.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
