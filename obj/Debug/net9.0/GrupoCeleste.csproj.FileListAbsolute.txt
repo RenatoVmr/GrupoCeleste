@@ -223,3 +223,4 @@ C:\Users\rs_va\OneDrive\Desktop\grupoceleste\obj\Debug\net9.0\GrupoCeleste.pdb
 C:\Users\rs_va\OneDrive\Desktop\grupoceleste\obj\Debug\net9.0\GrupoCeleste.genruntimeconfig.cache
 C:\Users\rs_va\OneDrive\Desktop\grupoceleste\obj\Debug\net9.0\ref\GrupoCeleste.dll
 C:\Users\rs_va\OneDrive\Desktop\GrupoCeleste\obj\Debug\net9.0\compressed\ytnw75s1u8-5rcjp0v8ut.gz
+C:\Users\rs_va\OneDrive\Desktop\GrupoCeleste\obj\Debug\net9.0\GrupoCeleste.sourcelink.json
