@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GrupoCeleste")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e2a840638ba913799fd841eb9dce31b618ce905")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac0dadbdad8dbf7e5373a6ef984fe3209784dfae")]
 [assembly: System.Reflection.AssemblyProductAttribute("GrupoCeleste")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GrupoCeleste")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

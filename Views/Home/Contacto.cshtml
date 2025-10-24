@@ -1,0 +1,138 @@
+@model ContactoViewModel
+@{
+    ViewData["Title"] = "Contacto";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-danger mb-4">Contacto</h2>
+        </div>
+    </div>
+
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Mensaje"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Información de la empresa -->
+        <div class="col-md-6">
+            <div class="card bg-dark border-danger h-100">
+                <div class="card-header bg-danger text-white">
+                    <h4><i class="fas fa-building"></i> CineVerse</h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-light mb-3">
+                        Somos tu destino favorito para el entretenimiento cinematográfico. 
+                        Disfruta de las últimas películas en la mejor calidad.
+                    </p>
+                    
+                    <div class="mb-3">
+                        <h5 class="text-danger"><i class="fas fa-map-marker-alt"></i> Dirección</h5>
+                        <p class="text-light">Av. Principal 123, Centro de la Ciudad</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5 class="text-danger"><i class="fas fa-phone"></i> Teléfono</h5>
+                        <p class="text-light">+1 (555) 123-4567</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5 class="text-danger"><i class="fas fa-envelope"></i> Email</h5>
+                        <p class="text-light">info@cineverse.com</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5 class="text-danger"><i class="fas fa-clock"></i> Horarios</h5>
+                        <p class="text-light">
+                            Lunes a Domingo: 10:00 AM - 11:00 PM
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h5 class="text-danger"><i class="fas fa-share-alt"></i> Síguenos</h5>
+                        <div class="d-flex gap-3">
+                            <a href="#" class="text-danger"><i class="fab fa-facebook fa-2x"></i></a>
+                            <a href="#" class="text-danger"><i class="fab fa-twitter fa-2x"></i></a>
+                            <a href="#" class="text-danger"><i class="fab fa-instagram fa-2x"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de contacto -->
+        <div class="col-md-6">
+            <div class="card bg-dark border-danger h-100">
+                <div class="card-header bg-danger text-white">
+                    <h4><i class="fas fa-envelope"></i> Envíanos un mensaje</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Contacto" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Nombre" class="form-label text-light"></label>
+                            <input asp-for="Nombre" class="form-control bg-dark text-light border-danger" />
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label text-light"></label>
+                            <input asp-for="Email" class="form-control bg-dark text-light border-danger" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Asunto" class="form-label text-light"></label>
+                            <input asp-for="Asunto" class="form-control bg-dark text-light border-danger" />
+                            <span asp-validation-for="Asunto" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Mensaje" class="form-label text-light"></label>
+                            <textarea asp-for="Mensaje" class="form-control bg-dark text-light border-danger" rows="5"></textarea>
+                            <span asp-validation-for="Mensaje" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<style>
+    .form-control:focus {
+        background-color: #343a40 !important;
+        border-color: #dc3545 !important;
+        color: #fff !important;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+    }
+    
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+    
+    .card {
+        transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+</style>
