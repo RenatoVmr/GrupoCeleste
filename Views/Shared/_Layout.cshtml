@@ -35,6 +35,11 @@
                                 <i class="fas fa-video"></i> Películas
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Contacto">
+                                <i class="fas fa-envelope"></i> Contacto
+                            </a>
+                        </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
@@ -48,6 +53,14 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             var currentUser = await UserManager.GetUserAsync(User);
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="Mensajes">
+                                        <i class="fas fa-envelope-open-text"></i> Mensajes
+                                    </a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <span class="nav-link">
                                     <i class="fas fa-user"></i> @currentUser?.Nombre @currentUser?.Apellido
