@@ -24,7 +24,7 @@ public class AdminController : Controller
         
         var peliculasRecientes = await _context.Peliculas
             .OrderByDescending(p => p.FechaCreacion)
-            .Take(5)
+            .Take(12)
             .ToListAsync();
         
         return View(peliculasRecientes);
@@ -139,6 +139,19 @@ public class AdminController : Controller
         }
 
         return RedirectToAction(nameof(Index));
+    }
+
+    // GET: Admin/TodasLasPeliculas
+    public async Task<IActionResult> TodasLasPeliculas()
+    {
+        var todasLasPeliculas = await _context.Peliculas
+            .OrderByDescending(p => p.FechaCreacion)
+            .ToListAsync();
+        
+        ViewBag.TotalPeliculas = todasLasPeliculas.Count;
+        ViewData["Title"] = "Todas las Películas";
+        
+        return View("Index", todasLasPeliculas);
     }
 
     private bool PeliculaExists(int id)
