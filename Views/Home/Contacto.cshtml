@@ -96,48 +96,74 @@
                     </h3>
                 </div>
                 <div class="movie-card-body">
-                    <form asp-action="Contacto" method="post">
+                    <form asp-action="Contacto" method="post" novalidate>
                         @Html.AntiForgeryToken()
                         
+                        <!-- Campo Nombre (Obligatorio) -->
                         <div class="mb-3">
-                            <label asp-for="Nombre" class="form-label"></label>
-                            <input asp-for="Nombre" class="form-control" placeholder="Tu nombre completo">
-                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                            <label asp-for="Nombre" class="form-label">
+                                <i class="fas fa-user me-1"></i>@Html.DisplayNameFor(m => m.Nombre) <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Nombre" class="form-control" placeholder="Ingresa tu nombre completo" required>
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
                         </div>
 
+                        <!-- Campo Email (Obligatorio) -->
                         <div class="mb-3">
-                            <label asp-for="Email" class="form-label"></label>
-                            <input asp-for="Email" class="form-control" placeholder="tu@email.com">
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <label asp-for="Email" class="form-label">
+                                <i class="fas fa-envelope me-1"></i>@Html.DisplayNameFor(m => m.Email) <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="tu@email.com" required>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
                         </div>
 
+                        <!-- Campo Teléfono (Opcional) -->
                         <div class="mb-3">
-                            <label asp-for="Telefono" class="form-label"></label>
-                            <input asp-for="Telefono" class="form-control" placeholder="+51 987 654 321 (opcional)">
-                            <span asp-validation-for="Telefono" class="text-danger"></span>
+                            <label asp-for="Telefono" class="form-label">
+                                <i class="fas fa-phone me-1"></i>@Html.DisplayNameFor(m => m.Telefono) <span class="text-muted">(opcional)</span>
+                            </label>
+                            <input asp-for="Telefono" type="tel" class="form-control" placeholder="+51 987 654 321">
+                            <span asp-validation-for="Telefono" class="text-danger small"></span>
                         </div>
 
+                        <!-- Campo Asunto (Obligatorio) -->
                         <div class="mb-3">
-                            <label asp-for="Asunto" class="form-label"></label>
-                            <select asp-for="Asunto" class="form-select">
-                                <option value="">Selecciona un asunto</option>
-                                <option value="Información general">Información general</option>
-                                <option value="Reservas y horarios">Reservas y horarios</option>
-                                <option value="Precios y promociones">Precios y promociones</option>
-                                <option value="Problemas técnicos">Problemas técnicos</option>
-                                <option value="Sugerencias">Sugerencias</option>
-                                <option value="Quejas">Quejas</option>
-                                <option value="Otro">Otro</option>
+                            <label asp-for="Asunto" class="form-label">
+                                <i class="fas fa-tag me-1"></i>@Html.DisplayNameFor(m => m.Asunto) <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="Asunto" class="form-select" required>
+                                <option value="">-- Selecciona un asunto --</option>
+                                <option value="Información general">📋 Información general</option>
+                                <option value="Reservas y horarios">🎫 Reservas y horarios</option>
+                                <option value="Precios y promociones">💰 Precios y promociones</option>
+                                <option value="Problemas técnicos">🔧 Problemas técnicos</option>
+                                <option value="Sugerencias">💡 Sugerencias</option>
+                                <option value="Quejas">⚠️ Quejas</option>
+                                <option value="Otro">📝 Otro</option>
                             </select>
-                            <span asp-validation-for="Asunto" class="text-danger"></span>
+                            <span asp-validation-for="Asunto" class="text-danger small"></span>
                         </div>
 
+                        <!-- Campo Mensaje (Obligatorio) -->
                         <div class="mb-3">
-                            <label asp-for="Mensaje" class="form-label"></label>
-                            <textarea asp-for="Mensaje" class="form-control" rows="5" placeholder="Escribe tu mensaje aquí..."></textarea>
-                            <span asp-validation-for="Mensaje" class="text-danger"></span>
+                            <label asp-for="Mensaje" class="form-label">
+                                <i class="fas fa-comment me-1"></i>@Html.DisplayNameFor(m => m.Mensaje) <span class="text-danger">*</span>
+                            </label>
+                            <textarea asp-for="Mensaje" class="form-control" rows="5" placeholder="Escribe tu mensaje aquí... (mínimo 10 caracteres)" required></textarea>
+                            <div class="form-text" style="color: var(--text-light-gray);">
+                                <small>Máximo 1000 caracteres. <span id="char-count">0</span>/1000</small>
+                            </div>
+                            <span asp-validation-for="Mensaje" class="text-danger small"></span>
                         </div>
 
+                        <!-- Nota sobre campos obligatorios -->
+                        <div class="mb-3">
+                            <small style="color: var(--text-light-gray);">
+                                <span class="text-danger">*</span> Campos obligatorios
+                            </small>
+                        </div>
+
+                        <!-- Botón de envío -->
                         <div class="d-grid">
                             <button type="submit" class="btn btn-danger btn-lg" style="background-color: var(--primary-red); border-color: var(--primary-red); font-weight: 600; border-radius: 50px; transition: all 0.3s ease;">
                                 <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
@@ -187,6 +213,76 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     
+    <script>
+        // Contador de caracteres para el mensaje
+        document.addEventListener('DOMContentLoaded', function() {
+            const mensajeTextarea = document.getElementById('Mensaje');
+            const charCount = document.getElementById('char-count');
+            
+            if (mensajeTextarea && charCount) {
+                // Actualizar contador al cargar
+                charCount.textContent = mensajeTextarea.value.length;
+                
+                // Actualizar contador mientras escribe
+                mensajeTextarea.addEventListener('input', function() {
+                    const length = this.value.length;
+                    charCount.textContent = length;
+                    
+                    // Cambiar color según límite
+                    if (length > 900) {
+                        charCount.style.color = '#dc3545'; // Rojo
+                    } else if (length > 800) {
+                        charCount.style.color = '#ffc107'; // Amarillo
+                    } else {
+                        charCount.style.color = 'var(--text-light-gray)'; // Normal
+                    }
+                });
+            }
+            
+            // Validación en tiempo real
+            const form = document.querySelector('form');
+            const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+            
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+                
+                input.addEventListener('input', function() {
+                    if (this.classList.contains('is-invalid')) {
+                        validateField(this);
+                    }
+                });
+            });
+            
+            function validateField(field) {
+                const isValid = field.checkValidity();
+                
+                if (isValid) {
+                    field.classList.remove('is-invalid');
+                    field.classList.add('is-valid');
+                } else {
+                    field.classList.remove('is-valid');
+                    field.classList.add('is-invalid');
+                }
+            }
+            
+            // Confirmar antes de enviar
+            form.addEventListener('submit', function(e) {
+                const nombre = document.getElementById('Nombre').value;
+                const email = document.getElementById('Email').value;
+                const asunto = document.getElementById('Asunto').value;
+                
+                if (nombre && email && asunto) {
+                    const confirmed = confirm(`¿Confirmas que quieres enviar este mensaje?\n\nDe: ${nombre}\nEmail: ${email}\nAsunto: ${asunto}`);
+                    if (!confirmed) {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+    </script>
+    
     <style>
         /* Estilos específicos para la página de contacto */
         .contact-info h6 {
@@ -231,6 +327,27 @@
         .form-select option {
             background-color: var(--tertiary-black);
             color: white;
+        }
+        
+        /* Estilos para validación */
+        .form-control.is-valid, .form-select.is-valid {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+        
+        .form-control.is-invalid, .form-select.is-invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+        
+        .text-danger {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
         }
     </style>
 }
