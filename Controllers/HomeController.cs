@@ -35,7 +35,7 @@ public class HomeController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Contacto(ContactoViewModel model)
+    public async Task<IActionResult> Contacto(ContactoViewModel model)
     {
         // Validación adicional de campos obligatorios
         if (string.IsNullOrWhiteSpace(model.Nombre))
@@ -73,12 +73,22 @@ public class HomeController : Controller
                     return View(model);
                 }
                 
-                // Simular procesamiento exitoso del formulario
-                // En producción aquí se implementaría:
-                // - Envío de email de confirmación
-                // - Guardar en base de datos
-                // - Notificación al equipo de soporte
-                // - Integración con sistema de tickets/CRM
+                // Guardar mensaje en base de datos
+                var mensaje = new Mensaje
+                {
+                    Nombre = model.Nombre,
+                    Email = model.Email,
+                    Asunto = model.Asunto,
+                    MensajeTexto = model.Mensaje,
+                    Telefono = model.Telefono,
+                    Fecha = DateTime.Now,
+                    Leido = false
+                };
+
+                _context.Mensajes.Add(mensaje);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Mensaje guardado en base de datos con ID: {MensajeId}", mensaje.Id);
                 
                 // Mensaje de confirmación detallado tras envío exitoso
                 TempData["MensajeExito"] = $"✅ ¡Mensaje enviado exitosamente!\n\n" +
