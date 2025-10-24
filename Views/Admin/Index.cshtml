@@ -1,0 +1,268 @@
+@model List<GrupoCeleste.Models.Pelicula>
+
+@{
+    ViewData["Title"] = "Panel de Administrador";
+}
+
+<!-- Hero Section para Admin -->
+<section class="hero-section">
+    <div class="container">
+        <h1><i class="fas fa-cogs"></i> Panel de Administrador</h1>
+        <p>Gestiona y administra todo el contenido de CineVerse desde aquí.</p>
+        <div class="mt-4">
+            <a asp-action="CrearPelicula" class="btn btn-danger btn-lg">
+                <i class="fas fa-plus"></i> Agregar Nueva Película
+            </a>
+            <a asp-controller="Peliculas" asp-action="Index" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-eye"></i> Ver Catálogo
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: #065f46; border-color: #047857; color: #d1fae5;">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: var(--hover-red); border-color: var(--primary-red); color: white;">
+                    <i class="fas fa-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- Estadísticas con diseño personalizado -->
+            <h2 class="section-title">
+                <i class="fas fa-chart-line"></i> Estadísticas del Sistema
+            </h2>
+            <div class="row g-4 mb-5">
+                <div class="col-md-6 col-lg-3">
+                    <div class="admin-stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>@ViewBag.TotalPeliculas</h3>
+                            <p>Total Películas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="admin-stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>@Model.Where(p => p.FechaCreacion.Date == DateTime.Today).Count()</h3>
+                            <p>Agregadas Hoy</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="admin-stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);">
+                            <i class="fas fa-calendar-week"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>@Model.Where(p => p.FechaCreacion >= DateTime.Today.AddDays(-7)).Count()</h3>
+                            <p>Esta Semana</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="admin-stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>@(Model.Any() ? Model.Average(p => p.Calificacion).ToString("F1") : "0.0")</h3>
+                            <p>Rating Promedio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Películas Recientes -->
+            <h2 class="section-title">
+                <i class="fas fa-history"></i> Películas Agregadas Recientemente
+            </h2>
+            <div class="admin-content-card">
+                @if (Model.Any())
+                {
+                    <div class="row g-4">
+                        @foreach (var pelicula in Model)
+                        {
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="movie-card admin-movie-card">
+                                    @if (!string.IsNullOrEmpty(pelicula.ImagenUrl))
+                                    {
+                                        <img src="@pelicula.ImagenUrl" alt="@pelicula.Titulo" />
+                                    }
+                                    else
+                                    {
+                                        <div class="no-image-placeholder">
+                                            <i class="fas fa-film fa-3x"></i>
+                                            <p>Sin imagen</p>
+                                        </div>
+                                    }
+                                    <div class="movie-card-body">
+                                        <h5>@pelicula.Titulo</h5>
+                                        <p class="movie-genre">
+                                            <i class="fas fa-tag"></i> @pelicula.Genero
+                                        </p>
+                                        <p class="movie-director">
+                                            <i class="fas fa-video"></i> @pelicula.Director
+                                        </p>
+                                        <p class="movie-year">
+                                            <i class="fas fa-calendar"></i> @pelicula.AnioLanzamiento
+                                        </p>
+                                        <div class="movie-rating mb-3">
+                                            <i class="fas fa-star"></i>
+                                            <span>@pelicula.Calificacion.ToString("F1")</span>
+                                        </div>
+                                        <div class="admin-actions">
+                                            <a asp-action="EditarPelicula" asp-route-id="@pelicula.Id" 
+                                               class="btn btn-outline-light btn-sm">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                    onclick="confirmarEliminar(@pelicula.Id, '@pelicula.Titulo')">
+                                                <i class="fas fa-trash"></i> Eliminar
+                                            </button>
+                                        </div>
+                                        <small class="text-muted d-block mt-2">
+                                            <i class="fas fa-clock"></i> @pelicula.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="fas fa-film fa-5x text-muted mb-4" style="color: var(--text-light-gray) !important;"></i>
+                        <h3 style="color: white;">No hay películas agregadas aún</h3>
+                        <p style="color: var(--text-light-gray);">Haz clic en "Agregar Nueva Película" para comenzar a gestionar tu catálogo</p>
+                        <a asp-action="CrearPelicula" class="btn btn-danger btn-lg mt-3">
+                            <i class="fas fa-plus"></i> Agregar Primera Película
+                        </a>
+                    </div>
+                }
+            </div>
+
+            <!-- Enlaces rápidos -->
+            <h2 class="section-title mt-5">
+                <i class="fas fa-tools"></i> Herramientas de Administración
+            </h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="genre-card admin-tool-card">
+                        <i class="fas fa-list"></i>
+                        <h5>Ver Catálogo Completo</h5>
+                        <p>Visualiza todas las películas del sistema</p>
+                        <a asp-controller="Peliculas" asp-action="Index" class="btn btn-outline-light btn-sm">
+                            Ir al Catálogo
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="genre-card admin-tool-card">
+                        <i class="fas fa-users"></i>
+                        <h5>Gestión de Usuarios</h5>
+                        <p>Administra usuarios y permisos del sistema</p>
+                        <button class="btn btn-outline-secondary btn-sm" disabled>
+                            Próximamente
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="genre-card admin-tool-card">
+                        <i class="fas fa-chart-bar"></i>
+                        <h5>Reportes Avanzados</h5>
+                        <p>Estadísticas detalladas y análisis del sistema</p>
+                        <button class="btn btn-outline-secondary btn-sm" disabled>
+                            Próximamente
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="genre-card admin-tool-card">
+                        <i class="fas fa-cog"></i>
+                        <h5>Configuración</h5>
+                        <p>Ajustes generales del sistema</p>
+                        <button class="btn btn-outline-secondary btn-sm" disabled>
+                            Próximamente
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="genre-card admin-tool-card">
+                        <i class="fas fa-database"></i>
+                        <h5>Backup & Restore</h5>
+                        <p>Respaldo y restauración de datos</p>
+                        <button class="btn btn-outline-secondary btn-sm" disabled>
+                            Próximamente
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="genre-card admin-tool-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h5>Seguridad</h5>
+                        <p>Logs de actividad y configuración de seguridad</p>
+                        <button class="btn btn-outline-secondary btn-sm" disabled>
+                            Próximamente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="modalEliminar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar la película "<span id="nombrePelicula"></span>"?</p>
+                <p class="text-muted">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="formEliminar" method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmarEliminar(id, titulo) {
+            document.getElementById('nombrePelicula').textContent = titulo;
+            document.getElementById('formEliminar').action = '@Url.Action("EliminarPelicula")/' + id;
+            var modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
+            modal.show();
+        }
+    </script>
+}

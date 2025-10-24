@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rs_va\\OneDrive\\Desktop\\GrupoCeleste\\GrupoCeleste.csproj": {}
+    "C:\\Users\\User\\Desktop\\grupoceleste\\GrupoCeleste\\GrupoCeleste.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rs_va\\OneDrive\\Desktop\\GrupoCeleste\\GrupoCeleste.csproj": {
+    "C:\\Users\\User\\Desktop\\grupoceleste\\GrupoCeleste\\GrupoCeleste.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rs_va\\OneDrive\\Desktop\\GrupoCeleste\\GrupoCeleste.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\grupoceleste\\GrupoCeleste\\GrupoCeleste.csproj",
         "projectName": "GrupoCeleste",
-        "projectPath": "C:\\Users\\rs_va\\OneDrive\\Desktop\\GrupoCeleste\\GrupoCeleste.csproj",
-        "packagesPath": "C:\\Users\\rs_va\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rs_va\\OneDrive\\Desktop\\GrupoCeleste\\obj\\",
+        "projectPath": "C:\\Users\\User\\Desktop\\grupoceleste\\GrupoCeleste\\GrupoCeleste.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\grupoceleste\\GrupoCeleste\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\rs_va\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"

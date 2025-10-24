@@ -1,4 +1,5 @@
 using GrupoCeleste.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace GrupoCeleste.Data;
@@ -10,6 +11,16 @@ public static class SeedData
         using var context = new ApplicationDbContext(
             serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>());
 
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<Usuario>>();
+
+        // Crear roles
+        await CreateRoles(roleManager);
+        
+        // Crear usuario administrador por defecto
+        await CreateAdminUser(userManager);
+
+        // Crear películas de ejemplo si no existen
         if (context.Peliculas.Any())
         {
             return; // La base de datos ya tiene datos
@@ -91,5 +102,56 @@ public static class SeedData
         );
 
         await context.SaveChangesAsync();
+    }
+
+    private static async Task CreateRoles(RoleManager<IdentityRole> roleManager)
+    {
+        // Crear rol de Admin si no existe
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
+
+        // Crear rol de Usuario si no existe
+        if (!await roleManager.RoleExistsAsync("Usuario"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Usuario"));
+        }
+    }
+
+    private static async Task CreateAdminUser(UserManager<Usuario> userManager)
+    {
+        // Verificar si ya existe un usuario administrador
+        var adminUser = await userManager.FindByEmailAsync("admin@grupoceleste.com");
+        
+        if (adminUser == null)
+        {
+            // Crear usuario administrador por defecto
+            adminUser = new Usuario
+            {
+                UserName = "admin@grupoceleste.com",
+                Email = "admin@grupoceleste.com",
+                Nombre = "Administrador",
+                Apellido = "Sistema",
+                EmailConfirmed = true,
+                FechaRegistro = DateTime.UtcNow
+            };
+
+            var result = await userManager.CreateAsync(adminUser, "Admin123!");
+            
+            if (result.Succeeded)
+            {
+                // Asignar rol de administrador
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+        else
+        {
+            // Asegurar que tenga el rol de admin si ya existe el usuario
+            if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
     }
 }

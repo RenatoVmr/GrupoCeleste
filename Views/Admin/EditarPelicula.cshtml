@@ -1,0 +1,206 @@
+@model GrupoCeleste.Models.Pelicula
+
+@{
+    ViewData["Title"] = "Editar Película";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1><i class="fas fa-edit"></i> Editar Película</h1>
+        <p>Modifica la información de "<strong>@Model.Titulo</strong>" en el catálogo de CineVerse.</p>
+        <div class="mt-4">
+            <a asp-action="Index" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-arrow-left"></i> Volver al Panel
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="admin-content-card">
+                    <form asp-action="EditarPelicula" method="post" id="formPelicula">
+                        @Html.AntiForgeryToken()
+                        <input asp-for="Id" type="hidden" />
+                        <input asp-for="FechaCreacion" type="hidden" />
+                        
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="row">
+                            <!-- Título -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Titulo" class="form-label fw-bold">
+                                    <i class="fas fa-film me-1"></i>Título *
+                                </label>
+                                <input asp-for="Titulo" class="form-control" />
+                                <span asp-validation-for="Titulo" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Año de Lanzamiento -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="AnioLanzamiento" class="form-label fw-bold">
+                                    <i class="fas fa-calendar me-1"></i>Año de Lanzamiento *
+                                </label>
+                                <input asp-for="AnioLanzamiento" type="number" min="1888" max="2100" class="form-control" />
+                                <span asp-validation-for="AnioLanzamiento" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-3">
+                            <label asp-for="Descripcion" class="form-label fw-bold">
+                                <i class="fas fa-align-left me-1"></i>Descripción *
+                            </label>
+                            <textarea asp-for="Descripcion" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <!-- Director -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Director" class="form-label fw-bold">
+                                    <i class="fas fa-video me-1"></i>Director *
+                                </label>
+                                <input asp-for="Director" class="form-control" />
+                                <span asp-validation-for="Director" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Género -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Genero" class="form-label fw-bold">
+                                    <i class="fas fa-tags me-1"></i>Género *
+                                </label>
+                                <select asp-for="Genero" class="form-select">
+                                    <option value="">Selecciona un género</option>
+                                    <option value="Acción">Acción</option>
+                                    <option value="Aventura">Aventura</option>
+                                    <option value="Comedia">Comedia</option>
+                                    <option value="Drama">Drama</option>
+                                    <option value="Terror">Terror</option>
+                                    <option value="Ciencia Ficción">Ciencia Ficción</option>
+                                    <option value="Fantasía">Fantasía</option>
+                                    <option value="Romance">Romance</option>
+                                    <option value="Thriller">Thriller</option>
+                                    <option value="Suspenso">Suspenso</option>
+                                    <option value="Crimen">Crimen</option>
+                                    <option value="Documental">Documental</option>
+                                    <option value="Animación">Animación</option>
+                                    <option value="Musical">Musical</option>
+                                    <option value="Bélico">Bélico</option>
+                                    <option value="Western">Western</option>
+                                    <option value="Biografía">Biografía</option>
+                                    <option value="Historia">Historia</option>
+                                </select>
+                                <span asp-validation-for="Genero" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Duración -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DuracionMinutos" class="form-label fw-bold">
+                                    <i class="fas fa-clock me-1"></i>Duración (minutos) *
+                                </label>
+                                <input asp-for="DuracionMinutos" type="number" min="1" max="500" class="form-control" />
+                                <span asp-validation-for="DuracionMinutos" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Calificación -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Calificacion" class="form-label fw-bold">
+                                    <i class="fas fa-star me-1"></i>Calificación
+                                </label>
+                                <input asp-for="Calificacion" type="number" min="0" max="10" step="0.1" class="form-control" />
+                                <span asp-validation-for="Calificacion" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Actores -->
+                        <div class="mb-3">
+                            <label asp-for="Actores" class="form-label fw-bold">
+                                <i class="fas fa-users me-1"></i>Actores Principales
+                            </label>
+                            <input asp-for="Actores" class="form-control" />
+                            <span asp-validation-for="Actores" class="text-danger small"></span>
+                        </div>
+
+                        <!-- URL de Imagen -->
+                        <div class="mb-4">
+                            <label asp-for="ImagenUrl" class="form-label fw-bold">
+                                <i class="fas fa-image me-1"></i>URL de la Imagen
+                            </label>
+                            <div class="input-group">
+                                <input asp-for="ImagenUrl" type="url" class="form-control" id="imagenUrl" />
+                                <button class="btn btn-outline-secondary" type="button" onclick="previsualizarImagen()">
+                                    <i class="fas fa-eye"></i> Vista previa
+                                </button>
+                            </div>
+                            <span asp-validation-for="ImagenUrl" class="text-danger small"></span>
+                            
+                            <!-- Vista previa actual y nueva -->
+                            <div class="mt-3">
+                                @if (!string.IsNullOrEmpty(Model.ImagenUrl))
+                                {
+                                    <div class="mb-2">
+                                        <small class="text-muted">Imagen actual:</small>
+                                        <div class="card" style="width: 150px; display: inline-block;">
+                                            <img src="@Model.ImagenUrl" class="card-img-top" style="height: 225px; object-fit: cover;">
+                                        </div>
+                                    </div>
+                                }
+                                <div id="previsualizacion" style="display: none;">
+                                    <small class="text-muted">Vista previa nueva imagen:</small>
+                                    <div class="card" style="width: 150px;">
+                                        <img id="imagenPrevia" class="card-img-top" style="height: 225px; object-fit: cover;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between">
+                            <small class="align-self-center" style="color: var(--text-light-gray);">
+                                <i class="fas fa-clock"></i> Agregada: @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                            </small>
+                            <div>
+                                <a asp-action="Index" class="btn btn-outline-light me-2">
+                                    <i class="fas fa-times me-1"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-save me-1"></i>Guardar Cambios
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        function previsualizarImagen() {
+            const url = document.getElementById('imagenUrl').value;
+            const previsualizacion = document.getElementById('previsualizacion');
+            const imagen = document.getElementById('imagenPrevia');
+            
+            if (url) {
+                imagen.src = url;
+                imagen.onload = function() {
+                    previsualizacion.style.display = 'block';
+                };
+                imagen.onerror = function() {
+                    alert('No se pudo cargar la imagen. Verifica que la URL sea correcta.');
+                    previsualizacion.style.display = 'none';
+                };
+            } else {
+                alert('Por favor, ingresa una URL de imagen.');
+            }
+        }
+    </script>
+}

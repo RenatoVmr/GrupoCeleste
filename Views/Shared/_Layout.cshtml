@@ -35,6 +35,14 @@
                                 <i class="fas fa-video"></i> Películas
                             </a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" asp-controller="Admin" asp-action="Index">
+                                    <i class="fas fa-cogs"></i> Panel Admin
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (SignInManager.IsSignedIn(User))
