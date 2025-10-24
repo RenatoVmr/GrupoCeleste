@@ -40,6 +40,14 @@
                                 <i class="fas fa-envelope"></i> Contacto
                             </a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Mensajes" asp-action="Index">
+                                    <i class="fas fa-cog"></i> Admin
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (SignInManager.IsSignedIn(User))
