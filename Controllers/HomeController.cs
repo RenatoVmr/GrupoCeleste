@@ -28,6 +28,26 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Contacto()
+    {
+        return View(new ContactoViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Contacto(ContactoViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            // Aquí se puede implementar el envío del email
+            // Por ahora, solo mostramos un mensaje de éxito
+            TempData["MensajeExito"] = "¡Gracias por contactarnos! Hemos recibido tu mensaje y te responderemos pronto.";
+            return RedirectToAction("Contacto");
+        }
+        
+        return View(model);
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

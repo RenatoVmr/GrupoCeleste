@@ -1,0 +1,228 @@
+@model ContactoViewModel
+@{
+    ViewData["Title"] = "Contacto - CineVerse";
+}
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <h1 class="section-title text-center">Contacto</h1>
+        <p class="lead text-center">Estamos aquí para ayudarte. Contáctanos y te responderemos pronto.</p>
+    </div>
+</div>
+
+<div class="container mt-5">
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-dismissible fade show mb-4" role="alert" style="background-color: var(--secondary-black); border: 2px solid var(--primary-red); color: var(--text-gray);">
+            <i class="fas fa-check-circle text-danger me-2"></i>@TempData["MensajeExito"]
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <!-- Información de contacto -->
+        <div class="col-lg-6">
+            <div class="movie-card h-100">
+                <div class="card-header text-white p-4" style="background: linear-gradient(135deg, var(--secondary-black) 0%, var(--primary-red) 100%); border-bottom: 2px solid var(--primary-red);">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-building me-2"></i>CineVerse
+                    </h3>
+                </div>
+                <div class="movie-card-body">
+                    <h5 style="color: white; font-weight: bold;">Tu destino para el mejor entretenimiento cinematográfico</h5>
+                    <p style="color: var(--text-light-gray);">Estamos aquí para brindarte la mejor experiencia cinematográfica. Contáctanos para cualquier consulta, sugerencia o información que necesites.</p>
+                    
+                    <div class="contact-info mt-4">
+                        <div class="mb-3">
+                            <h6><i class="fas fa-envelope text-danger me-2"></i><span style="color: white;">Correo Electrónico</span></h6>
+                            <p class="ms-4" style="color: var(--text-gray);">info@cineverse.com</p>
+                            <p class="ms-4" style="color: var(--text-gray);">soporte@cineverse.com</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6><i class="fas fa-phone text-danger me-2"></i><span style="color: white;">Teléfonos</span></h6>
+                            <p class="ms-4" style="color: var(--text-gray);">+51 (01) 234-5678</p>
+                            <p class="ms-4" style="color: var(--text-gray);">+51 987-654-321 (WhatsApp)</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6><i class="fas fa-map-marker-alt text-danger me-2"></i><span style="color: white;">Dirección</span></h6>
+                            <p class="ms-4" style="color: var(--text-gray);">Av. Principal 123, San Isidro<br>Lima, Perú</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6><i class="fas fa-clock text-danger me-2"></i><span style="color: white;">Horarios de Atención</span></h6>
+                            <p class="ms-4" style="color: var(--text-gray);">Lunes a Domingo<br>10:00 AM - 11:00 PM</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Redes Sociales -->
+                    <div class="social-media mt-4">
+                        <h6 style="color: white;">Síguenos en:</h6>
+                        <div class="d-flex gap-2 mt-2 flex-wrap">
+                            <a href="#" class="btn btn-outline-danger btn-sm" style="border-color: var(--primary-red); color: var(--primary-red);">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </a>
+                            <a href="#" class="btn btn-outline-danger btn-sm" style="border-color: var(--primary-red); color: var(--primary-red);">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </a>
+                            <a href="#" class="btn btn-outline-danger btn-sm" style="border-color: var(--primary-red); color: var(--primary-red);">
+                                <i class="fab fa-instagram"></i> Instagram
+                            </a>
+                            <a href="#" class="btn btn-outline-danger btn-sm" style="border-color: var(--primary-red); color: var(--primary-red);">
+                                <i class="fab fa-tiktok"></i> TikTok
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de contacto -->
+        <div class="col-lg-6">
+            <div class="movie-card h-100">
+                <div class="card-header text-white p-4" style="background: linear-gradient(135deg, var(--primary-red) 0%, var(--hover-red) 100%); border-bottom: 2px solid var(--primary-red);">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-paper-plane me-2"></i>Envíanos un mensaje
+                    </h3>
+                </div>
+                <div class="movie-card-body">
+                    <form asp-action="Contacto" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="mb-3">
+                            <label asp-for="Nombre" class="form-label"></label>
+                            <input asp-for="Nombre" class="form-control" placeholder="Tu nombre completo">
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" placeholder="tu@email.com">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Telefono" class="form-label"></label>
+                            <input asp-for="Telefono" class="form-control" placeholder="+51 987 654 321 (opcional)">
+                            <span asp-validation-for="Telefono" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Asunto" class="form-label"></label>
+                            <select asp-for="Asunto" class="form-select">
+                                <option value="">Selecciona un asunto</option>
+                                <option value="Información general">Información general</option>
+                                <option value="Reservas y horarios">Reservas y horarios</option>
+                                <option value="Precios y promociones">Precios y promociones</option>
+                                <option value="Problemas técnicos">Problemas técnicos</option>
+                                <option value="Sugerencias">Sugerencias</option>
+                                <option value="Quejas">Quejas</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                            <span asp-validation-for="Asunto" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Mensaje" class="form-label"></label>
+                            <textarea asp-for="Mensaje" class="form-control" rows="5" placeholder="Escribe tu mensaje aquí..."></textarea>
+                            <span asp-validation-for="Mensaje" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger btn-lg" style="background-color: var(--primary-red); border-color: var(--primary-red); font-weight: 600; border-radius: 50px; transition: all 0.3s ease;">
+                                <i class="fas fa-paper-plane me-2"></i>Enviar Mensaje
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="movie-card">
+                <div class="movie-card-body p-4">
+                    <h5 class="section-title text-center mb-4">¿Por qué elegir CineVerse?</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="genre-card h-100">
+                                <i class="fas fa-film fa-3x text-danger mb-3"></i>
+                                <h6 style="color: white;">Últimas Películas</h6>
+                                <p style="color: var(--text-light-gray);">Los mejores estrenos y clásicos del cine</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="genre-card h-100">
+                                <i class="fas fa-couch fa-3x text-danger mb-3"></i>
+                                <h6 style="color: white;">Comodidad Premium</h6>
+                                <p style="color: var(--text-light-gray);">Asientos cómodos y ambiente acogedor</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="genre-card h-100">
+                                <i class="fas fa-headset fa-3x text-danger mb-3"></i>
+                                <h6 style="color: white;">Atención 24/7</h6>
+                                <p style="color: var(--text-light-gray);">Soporte al cliente siempre disponible</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <style>
+        /* Estilos específicos para la página de contacto */
+        .contact-info h6 {
+            transition: all 0.3s ease;
+        }
+        
+        .contact-info h6:hover {
+            transform: translateX(5px);
+        }
+        
+        .social-media .btn:hover {
+            background-color: var(--primary-red) !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--hover-red) !important;
+            border-color: var(--hover-red) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+        }
+        
+        .form-control::placeholder {
+            color: var(--text-light-gray);
+        }
+        
+        .form-select {
+            background-color: var(--tertiary-black);
+            border: 1px solid var(--text-light-gray);
+            color: white;
+        }
+        
+        .form-select:focus {
+            background-color: var(--tertiary-black);
+            border-color: var(--primary-red);
+            color: white;
+            box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25);
+        }
+        
+        .form-select option {
+            background-color: var(--tertiary-black);
+            color: white;
+        }
+    </style>
+}
