@@ -39,10 +39,27 @@ public class HomeController : Controller
     {
         if (ModelState.IsValid)
         {
-            // Aquí se puede implementar el envío del email
-            // Por ahora, solo mostramos un mensaje de éxito
-            TempData["MensajeExito"] = "¡Gracias por contactarnos! Hemos recibido tu mensaje y te responderemos pronto.";
-            return RedirectToAction("Contacto");
+            try
+            {
+                // Simular procesamiento del formulario
+                _logger.LogInformation("Nuevo mensaje de contacto recibido de: {Email}, Asunto: {Asunto}", 
+                    model.Email, model.Asunto);
+                
+                // En un futuro aquí se puede implementar:
+                // - Envío de email
+                // - Guardar en base de datos
+                // - Integración con sistema de tickets
+                
+                TempData["MensajeExito"] = $"¡Gracias {model.Nombre}! Hemos recibido tu mensaje sobre '{model.Asunto}' y te responderemos a {model.Email} pronto.";
+                
+                // Limpiar el formulario después del envío exitoso
+                return RedirectToAction("Contacto");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al procesar el formulario de contacto");
+                TempData["MensajeError"] = "Ocurrió un error al enviar tu mensaje. Por favor, inténtalo nuevamente.";
+            }
         }
         
         return View(model);
