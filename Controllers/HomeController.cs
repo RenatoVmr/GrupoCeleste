@@ -34,12 +34,25 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult Contacto(ContactoViewModel model)
+    public async Task<IActionResult> Contacto(ContactoViewModel model)
     {
         if (ModelState.IsValid)
         {
-            // Aquí se procesaría el formulario (por ahora solo simularemos el envío)
-            TempData["Mensaje"] = "¡Gracias por contactarnos! Tu mensaje ha sido enviado exitosamente.";
+            // Crear el mensaje y guardarlo en la base de datos
+            var mensaje = new Mensaje
+            {
+                Nombre = model.Nombre,
+                Email = model.Email,
+                Asunto = model.Asunto,
+                Contenido = model.Mensaje,
+                FechaEnvio = DateTime.Now,
+                Leido = false
+            };
+
+            _context.Mensajes.Add(mensaje);
+            await _context.SaveChangesAsync();
+
+            TempData["Mensaje"] = "¡Gracias por contactarnos! Tu mensaje ha sido guardado y lo revisaremos pronto.";
             return RedirectToAction("Contacto");
         }
 

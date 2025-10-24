@@ -154,6 +154,40 @@ public class AdminController : Controller
         return View(todasLasPeliculas);
     }
 
+    // Funcionalidad de Mensajes de HU-16
+    public async Task<IActionResult> Mensajes()
+    {
+        var mensajes = await _context.Mensajes
+            .OrderByDescending(m => m.FechaEnvio)
+            .ToListAsync();
+        
+        return View(mensajes);
+    }
+
+    public async Task<IActionResult> MarcarLeido(int id)
+    {
+        var mensaje = await _context.Mensajes.FindAsync(id);
+        if (mensaje != null)
+        {
+            mensaje.Leido = true;
+            await _context.SaveChangesAsync();
+        }
+        
+        return RedirectToAction("Mensajes");
+    }
+
+    public async Task<IActionResult> EliminarMensaje(int id)
+    {
+        var mensaje = await _context.Mensajes.FindAsync(id);
+        if (mensaje != null)
+        {
+            _context.Mensajes.Remove(mensaje);
+            await _context.SaveChangesAsync();
+        }
+        
+        return RedirectToAction("Mensajes");
+    }
+
     private bool PeliculaExists(int id)
     {
         return _context.Peliculas.Any(e => e.Id == id);

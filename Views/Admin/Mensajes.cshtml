@@ -1,0 +1,111 @@
+@model IEnumerable<Mensaje>
+@{
+    ViewData["Title"] = "Mensajes de Contacto - Panel Admin";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-danger mb-4">
+                <i class="fas fa-envelope-open-text"></i> Mensajes de Contacto
+            </h2>
+            
+            @if (Model.Any())
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> 
+                    Total de mensajes: <strong>@Model.Count()</strong> | 
+                    No leídos: <strong>@Model.Count(m => !m.Leido)</strong> | 
+                    Leídos: <strong>@Model.Count(m => m.Leido)</strong>
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <i class="fas fa-inbox fa-3x mb-3"></i>
+            <h4>No hay mensajes</h4>
+            <p>Aún no se han recibido mensajes de contacto.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var mensaje in Model)
+            {
+                <div class="col-md-12 mb-3">
+                    <div class="card @(mensaje.Leido ? "border-secondary" : "border-danger bg-dark")">
+                        <div class="card-header @(mensaje.Leido ? "bg-secondary" : "bg-danger") text-white d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title mb-0">
+                                    @if (!mensaje.Leido)
+                                    {
+                                        <i class="fas fa-exclamation-circle text-warning"></i>
+                                    }
+                                    @mensaje.Asunto
+                                </h5>
+                                <small>
+                                    <i class="fas fa-user"></i> @mensaje.Nombre | 
+                                    <i class="fas fa-envelope"></i> @mensaje.Email | 
+                                    <i class="fas fa-calendar"></i> @mensaje.FechaEnvio.ToString("dd/MM/yyyy HH:mm")
+                                </small>
+                            </div>
+                            <div>
+                                @if (!mensaje.Leido)
+                                {
+                                    <span class="badge bg-warning text-dark">Nuevo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Leído</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-body @(mensaje.Leido ? "" : "text-light")">
+                            <p class="card-text">@mensaje.Contenido</p>
+                            
+                            <div class="btn-group" role="group">
+                                @if (!mensaje.Leido)
+                                {
+                                    <a href="@Url.Action("MarcarLeido", new { id = mensaje.Id })" 
+                                       class="btn btn-success btn-sm">
+                                        <i class="fas fa-check"></i> Marcar como leído
+                                    </a>
+                                }
+                                
+                                <a href="mailto:@mensaje.Email?subject=Re: @mensaje.Asunto" 
+                                   class="btn btn-primary btn-sm">
+                                    <i class="fas fa-reply"></i> Responder
+                                </a>
+                                
+                                <a href="@Url.Action("EliminarMensaje", new { id = mensaje.Id })" 
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('¿Estás seguro de que quieres eliminar este mensaje?')">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .card:hover {
+        transform: translateY(-3px);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    
+    .btn-group .btn {
+        margin-right: 5px;
+    }
+    
+    .badge {
+        font-size: 0.8em;
+    }
+</style>
