@@ -1,0 +1,133 @@
+@model Mensaje
+@{
+    ViewData["Title"] = "Detalle del Mensaje";
+}
+
+<div class="hero-section">
+    <div class="container">
+        <h1 class="section-title text-center">Detalle del Mensaje</h1>
+        <p class="lead text-center">Información completa del mensaje de contacto</p>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="movie-card">
+                <div class="movie-card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3 style="color: white; margin-bottom: 1rem;">
+                                <i class="fas fa-envelope me-2"></i>@Model.Asunto
+                            </h3>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            @if (Model.Leido)
+                            {
+                                <span class="badge bg-success fs-6">
+                                    <i class="fas fa-check me-1"></i>Leído
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning fs-6">
+                                    <i class="fas fa-bell me-1"></i>Nuevo
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <hr style="border-color: var(--primary-red);">
+
+                    <!-- Información del remitente -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 style="color: var(--primary-red);">
+                                <i class="fas fa-user me-2"></i>Información del Remitente
+                            </h6>
+                            <div class="ms-3">
+                                <p style="color: white;">
+                                    <strong>Nombre:</strong> @Model.Nombre
+                                </p>
+                                <p style="color: white;">
+                                    <strong>Email:</strong> 
+                                    <a href="mailto:@Model.Email" style="color: var(--primary-red);">
+                                        @Model.Email
+                                    </a>
+                                </p>
+                                @if (!string.IsNullOrEmpty(Model.Telefono))
+                                {
+                                    <p style="color: white;">
+                                        <strong>Teléfono:</strong> 
+                                        <a href="tel:@Model.Telefono" style="color: var(--primary-red);">
+                                            @Model.Telefono
+                                        </a>
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 style="color: var(--primary-red);">
+                                <i class="fas fa-clock me-2"></i>Información Temporal
+                            </h6>
+                            <div class="ms-3">
+                                <p style="color: white;">
+                                    <strong>Fecha de envío:</strong><br>
+                                    @Model.Fecha.ToString("dddd, dd 'de' MMMM 'de' yyyy 'a las' HH:mm")
+                                </p>
+                                @if (Model.FechaLectura.HasValue)
+                                {
+                                    <p style="color: white;">
+                                        <strong>Fecha de lectura:</strong><br>
+                                        @Model.FechaLectura.Value.ToString("dddd, dd 'de' MMMM 'de' yyyy 'a las' HH:mm")
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mensaje -->
+                    <div class="mb-4">
+                        <h6 style="color: var(--primary-red);">
+                            <i class="fas fa-comment me-2"></i>Mensaje
+                        </h6>
+                        <div class="ms-3 p-3" style="background-color: var(--tertiary-black); border-radius: 8px; border-left: 4px solid var(--primary-red);">
+                            <p style="color: var(--text-gray); line-height: 1.6; margin: 0;">
+                                @Html.Raw(Model.MensajeTexto.Replace("\n", "<br>"))
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a asp-action="Index" class="btn btn-outline-danger">
+                            <i class="fas fa-arrow-left me-2"></i>Volver a la Lista
+                        </a>
+                        
+                        <a href="mailto:@Model.Email?subject=Re: @Model.Asunto" class="btn btn-danger">
+                            <i class="fas fa-reply me-2"></i>Responder por Email
+                        </a>
+                        
+                        @if (!Model.Leido)
+                        {
+                            <form asp-action="MarkAsRead" asp-route-id="@Model.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check me-2"></i>Marcar como Leído
+                                </button>
+                            </form>
+                        }
+                        
+                        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('¿Estás seguro de eliminar este mensaje? Esta acción no se puede deshacer.')">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline-secondary">
+                                <i class="fas fa-trash me-2"></i>Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
