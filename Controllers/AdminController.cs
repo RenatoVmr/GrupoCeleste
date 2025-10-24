@@ -149,9 +149,9 @@ public class AdminController : Controller
             .ToListAsync();
         
         ViewBag.TotalPeliculas = todasLasPeliculas.Count;
-        ViewData["Title"] = "Todas las Películas";
+        ViewData["Title"] = "Gestión de Películas";
         
-        return View("Index", todasLasPeliculas);
+        return View(todasLasPeliculas);
     }
 
     private bool PeliculaExists(int id)

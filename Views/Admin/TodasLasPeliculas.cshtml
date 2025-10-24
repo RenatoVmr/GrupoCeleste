@@ -1,0 +1,365 @@
+@model IEnumerable<GrupoCeleste.Models.Pelicula>
+
+@{
+    ViewData["Title"] = "Gestión de Películas";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1><i class="fas fa-list-ul"></i> Gestión de Películas</h1>
+        <p>Lista completa de todas las películas en el catálogo de CineVerse con opciones de gestión.</p>
+        <div class="mt-4">
+            <a asp-action="Index" class="btn btn-outline-light btn-lg me-3">
+                <i class="fas fa-arrow-left"></i> Volver al Panel
+            </a>
+            <a asp-action="CrearPelicula" class="btn btn-danger btn-lg">
+                <i class="fas fa-plus"></i> Agregar Nueva Película
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container my-5">
+    <!-- Mensajes de confirmación -->
+    <div class="row">
+        <div class="col-12">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="admin-stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>@ViewBag.TotalPeliculas</h3>
+                    <p>Total de Películas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="admin-stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>@(Model.Any() ? Model.Average(p => p.Calificacion).ToString("F1") : "0.0")</h3>
+                    <p>Calificación Promedio</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Películas -->
+    <div class="row">
+        <div class="col-12">
+            <div class="admin-content-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3><i class="fas fa-table me-2"></i>Lista de Películas</h3>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-light btn-sm" onclick="toggleView('table')" id="btnTable">
+                            <i class="fas fa-table"></i> Vista Tabla
+                        </button>
+                        <button type="button" class="btn btn-outline-light btn-sm" onclick="toggleView('cards')" id="btnCards">
+                            <i class="fas fa-th"></i> Vista Cards
+                        </button>
+                    </div>
+                </div>
+
+                @if (Model.Any())
+                {
+                    <!-- Vista Tabla -->
+                    <div id="tableView" class="table-responsive">
+                        <table class="table table-dark table-hover align-middle">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Título</th>
+                                    <th>Director</th>
+                                    <th>Género</th>
+                                    <th>Año</th>
+                                    <th>Duración</th>
+                                    <th>Calificación</th>
+                                    <th>Fecha Creación</th>
+                                    <th width="150">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var pelicula in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(pelicula.ImagenUrl))
+                                            {
+                                                <img src="@pelicula.ImagenUrl" alt="@pelicula.Titulo" class="table-image">
+                                            }
+                                            else
+                                            {
+                                                <div class="placeholder-image">
+                                                    <i class="fas fa-film"></i>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td>
+                                            <strong>@pelicula.Titulo</strong>
+                                            <br>
+                                            <small class="text-muted">@(pelicula.Descripcion?.Length > 50 ? pelicula.Descripcion.Substring(0, 50) + "..." : pelicula.Descripcion)</small>
+                                        </td>
+                                        <td>@pelicula.Director</td>
+                                        <td>
+                                            <span class="badge bg-secondary">@pelicula.Genero</span>
+                                        </td>
+                                        <td>@pelicula.AnioLanzamiento</td>
+                                        <td>@pelicula.DuracionMinutos min</td>
+                                        <td>
+                                            @if (pelicula.Calificacion > 0)
+                                            {
+                                                <span class="rating-badge">
+                                                    <i class="fas fa-star"></i> @pelicula.Calificacion.ToString("F1")
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">N/A</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <small>@pelicula.FechaCreacion.ToString("dd/MM/yyyy")</small>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group-vertical" role="group">
+                                                <a asp-action="EditarPelicula" asp-route-id="@pelicula.Id" 
+                                                   class="btn btn-outline-light btn-sm mb-1" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                        onclick="confirmarEliminar(@pelicula.Id, '@pelicula.Titulo')" title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Vista Cards (oculta por defecto) -->
+                    <div id="cardsView" style="display: none;">
+                        <div class="row">
+                            @foreach (var pelicula in Model)
+                            {
+                                <div class="col-lg-4 col-md-6 mb-4">
+                                    <div class="admin-movie-card">
+                                        <div class="movie-image">
+                                            @if (!string.IsNullOrEmpty(pelicula.ImagenUrl))
+                                            {
+                                                <img src="@pelicula.ImagenUrl" alt="@pelicula.Titulo">
+                                            }
+                                            else
+                                            {
+                                                <div class="placeholder-image">
+                                                    <i class="fas fa-film"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="movie-content">
+                                            <h5>@pelicula.Titulo</h5>
+                                            <p class="movie-details">
+                                                <strong>Director:</strong> @pelicula.Director<br>
+                                                <strong>Género:</strong> @pelicula.Genero<br>
+                                                <strong>Año:</strong> @pelicula.AnioLanzamiento
+                                            </p>
+                                            <div class="admin-actions">
+                                                <a asp-action="EditarPelicula" asp-route-id="@pelicula.Id" 
+                                                   class="btn btn-outline-light btn-sm">
+                                                    <i class="fas fa-edit"></i> Editar
+                                                </a>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                        onclick="confirmarEliminar(@pelicula.Id, '@pelicula.Titulo')">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="fas fa-film fa-3x text-muted mb-3"></i>
+                        <h3 class="text-muted">No hay películas en el catálogo</h3>
+                        <p class="text-muted">Comienza agregando tu primera película.</p>
+                        <a asp-action="CrearPelicula" class="btn btn-danger">
+                            <i class="fas fa-plus"></i> Agregar Primera Película
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="modalEliminar" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar la película "<span id="nombrePelicula"></span>"?</p>
+                <p class="text-muted">Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="formEliminar" method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-1"></i>Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmarEliminar(id, titulo) {
+            document.getElementById('nombrePelicula').textContent = titulo;
+            document.getElementById('formEliminar').action = '@Url.Action("EliminarPelicula")/' + id;
+            var modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
+            modal.show();
+        }
+
+        function toggleView(view) {
+            const tableView = document.getElementById('tableView');
+            const cardsView = document.getElementById('cardsView');
+            const btnTable = document.getElementById('btnTable');
+            const btnCards = document.getElementById('btnCards');
+
+            if (view === 'table') {
+                tableView.style.display = 'block';
+                cardsView.style.display = 'none';
+                btnTable.classList.add('active');
+                btnCards.classList.remove('active');
+            } else {
+                tableView.style.display = 'none';
+                cardsView.style.display = 'block';
+                btnTable.classList.remove('active');
+                btnCards.classList.add('active');
+            }
+        }
+
+        // Inicializar vista tabla por defecto
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('btnTable').classList.add('active');
+        });
+    </script>
+
+    <style>
+        .table-image {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .placeholder-image {
+            width: 60px;
+            height: 80px;
+            background-color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            color: var(--text-light-gray);
+        }
+        
+        .rating-badge {
+            background-color: var(--accent-red);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.875rem;
+        }
+        
+        .table-dark {
+            --bs-table-bg: var(--card-bg);
+            --bs-table-border-color: var(--border-color);
+        }
+        
+        .table-danger th {
+            background-color: var(--accent-red) !important;
+            border-color: var(--accent-red) !important;
+            color: white !important;
+        }
+        
+        .btn-group .btn.active {
+            background-color: var(--accent-red);
+            border-color: var(--accent-red);
+            color: white;
+        }
+        
+        .admin-movie-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .admin-movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+        }
+        
+        .admin-movie-card .movie-image {
+            height: 300px;
+            overflow: hidden;
+        }
+        
+        .admin-movie-card .movie-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .admin-movie-card .movie-content {
+            padding: 1rem;
+        }
+        
+        .admin-movie-card .movie-details {
+            font-size: 0.875rem;
+            color: var(--text-light-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
+}
