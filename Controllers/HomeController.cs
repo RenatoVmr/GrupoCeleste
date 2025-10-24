@@ -28,6 +28,37 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Contacto()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Contacto(ContactoViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            // Crear el mensaje y guardarlo en la base de datos
+            var mensaje = new Mensaje
+            {
+                Nombre = model.Nombre,
+                Email = model.Email,
+                Asunto = model.Asunto,
+                Contenido = model.Mensaje,
+                FechaEnvio = DateTime.Now,
+                Leido = false
+            };
+
+            _context.Mensajes.Add(mensaje);
+            await _context.SaveChangesAsync();
+
+            TempData["Mensaje"] = "¡Gracias por contactarnos! Tu mensaje ha sido guardado y lo revisaremos pronto.";
+            return RedirectToAction("Contacto");
+        }
+
+        return View(model);
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
