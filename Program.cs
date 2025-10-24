@@ -43,6 +43,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         await SeedData.Initialize(services);
+        // Crear usuario administrador
+        await AdminSeeder.CreateAdminUser(services);
     }
     catch (Exception ex)
     {
