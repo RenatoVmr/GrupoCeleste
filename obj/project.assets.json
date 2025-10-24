@@ -3253,19 +3253,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\rs_va\\.nuget\\packages\\": {}
+    "C:\\Users\\ALONSO\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rs_va\\OneDrive\\Desktop\\grupoceleste\\GrupoCeleste.csproj",
+      "projectUniqueName": "C:\\Users\\ALONSO\\Desktop\\Nueva carpeta\\GrupoCeleste\\GrupoCeleste.csproj",
       "projectName": "GrupoCeleste",
-      "projectPath": "C:\\Users\\rs_va\\OneDrive\\Desktop\\grupoceleste\\GrupoCeleste.csproj",
-      "packagesPath": "C:\\Users\\rs_va\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rs_va\\OneDrive\\Desktop\\grupoceleste\\obj\\",
+      "projectPath": "C:\\Users\\ALONSO\\Desktop\\Nueva carpeta\\GrupoCeleste\\GrupoCeleste.csproj",
+      "packagesPath": "C:\\Users\\ALONSO\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ALONSO\\Desktop\\Nueva carpeta\\GrupoCeleste\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\rs_va\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\ALONSO\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -3329,7 +3329,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -28,6 +28,24 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Contacto()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Contacto(ContactoViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            // Aquí se procesaría el formulario (por ahora solo simularemos el envío)
+            TempData["Mensaje"] = "¡Gracias por contactarnos! Tu mensaje ha sido enviado exitosamente.";
+            return RedirectToAction("Contacto");
+        }
+
+        return View(model);
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
