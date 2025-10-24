@@ -28,8 +28,7 @@ namespace GrupoCeleste.Data
                     Nombre = "Administrador",
                     Apellido = "CineVerse",
                     EmailConfirmed = true,
-                    FechaRegistro = DateTime.Now,
-                    EsActivo = true
+                    FechaRegistro = DateTime.Now
                 };
 
                 var result = await userManager.CreateAsync(adminUser, "Admin123!");
