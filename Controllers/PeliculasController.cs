@@ -17,11 +17,24 @@ public class PeliculasController : Controller
     }
 
     // GET: /Peliculas
-    public async Task<IActionResult> Index()
+    // Añadido parámetro opcional 'genre' para filtrar por género.
+    public async Task<IActionResult> Index(string? genre)
     {
-        var peliculas = await _context.Peliculas
+        var query = _context.Peliculas.AsQueryable();
+
+        if (!string.IsNullOrEmpty(genre))
+        {
+            query = query.Where(p => p.Genero == genre);
+        }
+
+        var peliculas = await query
             .OrderByDescending(p => p.Calificacion)
             .ToListAsync();
+
+        // Lista de géneros disponibles (botones/menú)
+        var genres = new List<string> { "Acción", "Drama", "Comedia", "Terror", "Romance", "Sci-Fi" };
+        ViewBag.Genres = genres;
+        ViewBag.SelectedGenre = genre ?? string.Empty;
 
         return View(peliculas);
     }
