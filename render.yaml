@@ -12,6 +12,10 @@ services:
         value: Production
       - key: DATABASE_URL
         value: Data Source=/app/Data/GrupoCeleste.db
+      - key: HTTP_PORTS
+        value: ""
+      - key: HTTPS_PORTS
+        value: ""
     disk:
       name: data
       mountPath: /app/Data

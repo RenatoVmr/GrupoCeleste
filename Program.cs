@@ -5,10 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuración simplificada para Render
-// Usar las URLs por defecto que ASP.NET Core maneja automáticamente
+// Configuración de puerto para Render - método más directo
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
+// Limpiar configuración previa de puertos
+builder.Configuration["ASPNETCORE_URLS"] = $"http://0.0.0.0:{port}";
+builder.Configuration["HTTP_PORTS"] = "";
+builder.Configuration["HTTPS_PORTS"] = "";
 
 // Configuración de archivos JSON opcionales
 builder.Configuration.AddJsonFile("appsettings.MercadoPago.json", optional: true, reloadOnChange: true);
@@ -63,12 +67,18 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Seed the database
+// Crear y migrar la base de datos automáticamente
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        
+        // Asegurar que la base de datos existe y está migrada
+        await context.Database.EnsureCreatedAsync();
+        
+        // Inicializar datos
         await SeedData.Initialize(services);
         // Crear usuario administrador
         await AdminSeeder.CreateAdminUser(services);
