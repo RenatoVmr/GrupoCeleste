@@ -39,6 +39,7 @@ public class PeliculasController : Controller
 
         var totalCount = await query.CountAsync();
         var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
         if (page < 1) page = 1;
         if (page > totalPages && totalPages > 0) page = totalPages;
 
@@ -52,6 +53,7 @@ public class PeliculasController : Controller
         ViewBag.SearchTerm = search ?? string.Empty;
         ViewBag.Genres = new List<string> { "Acción", "Drama", "Comedia", "Terror", "Romance", "Sci-Fi" };
         ViewBag.SelectedGenre = genre ?? string.Empty;
+
         ViewBag.Page = page;
         ViewBag.TotalPages = totalPages;
         ViewBag.PageSize = pageSize;
