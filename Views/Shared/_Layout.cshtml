@@ -35,6 +35,16 @@
                                 <i class="fas fa-video"></i> Películas
                             </a>
                         </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Recommendations" asp-action="Index" method="get" class="d-inline">
+                                    <button type="submit" class="btn btn-danger nav-link text-white px-3" style="font-weight:bold;">
+                                        <i class="fas fa-star"></i> Para Ti
+                                    </button>
+                                </form>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Contacto">
                                 <i class="fas fa-envelope"></i> Contacto
