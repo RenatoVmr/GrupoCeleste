@@ -7,16 +7,27 @@ using System.Collections.Generic;
 
 namespace GrupoCeleste.Services
 {
+    /// <summary>
+    /// Servicio de recomendaciones de películas usando ML.NET
+    /// Implementa filtrado colaborativo con Matrix Factorization
+    /// </summary>
     public class RecommendationService
     {
         private readonly MLContext _mlContext = new MLContext();
         private ITransformer? _model;
 
+        /// <summary>
+        /// Constructor que inicializa y entrena el modelo de recomendaciones
+        /// </summary>
         public RecommendationService()
         {
             TrainModel();
         }
 
+        /// <summary>
+        /// Entrena el modelo de recomendaciones usando Matrix Factorization
+        /// En producción, este método debería usar datos reales de la base de datos
+        /// </summary>
         private void TrainModel()
         {
             // Datos de ejemplo para entrenamiento (en producción usa datos reales)
