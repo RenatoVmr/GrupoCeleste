@@ -12,6 +12,27 @@
         </h1>
     </div>
 
+    <!-- Filtros por género -->
+    <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Géneros">
+            @{
+                var genres = ViewBag.Genres as List<string> ?? new List<string>();
+                var selected = ViewBag.SelectedGenre as string ?? string.Empty;
+            }
+            <a asp-action="Index" class="btn btn-sm @(string.IsNullOrEmpty(selected) ? "btn-primary" : "btn-outline-light")">Todos</a>
+            @foreach (var g in genres)
+            {
+                var isActive = string.Equals(g, selected, StringComparison.OrdinalIgnoreCase);
+                <a asp-action="Index" asp-route-genre="@g" class="btn btn-sm @(isActive ? "btn-primary" : "btn-outline-light")">@g</a>
+            }
+        </div>
+
+        @if (!string.IsNullOrEmpty((string)ViewBag.SelectedGenre))
+        {
+            <span class="badge bg-secondary ms-3">Género: @ViewBag.SelectedGenre</span>
+        }
+    </div>
+
     <!-- Grid de Películas -->
     <div class="row g-4">
         @if (Model != null && Model.Any())
