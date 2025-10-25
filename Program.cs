@@ -4,16 +4,44 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuración de puerto para Render - método más directo
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
+// Limpiar configuración previa de puertos
+builder.Configuration["ASPNETCORE_URLS"] = $"http://0.0.0.0:{port}";
+builder.Configuration["HTTP_PORTS"] = "";
+builder.Configuration["HTTPS_PORTS"] = "";
+
+// Configuración de archivos JSON opcionales
 builder.Configuration.AddJsonFile("appsettings.MercadoPago.json", optional: true, reloadOnChange: true);
+
+// Configuración de servicios
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<GrupoCeleste.Services.MercadoPagoService>();
 
-// Add services to the container.
+// Configuración de base de datos
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? "Data Source=cineverse.db";
+    ?? Environment.GetEnvironmentVariable("DATABASE_URL")
+    ?? "Data Source=/app/Data/GrupoCeleste.db";
 
+// Configuración de base de datos con soporte para directorios
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+{
+    options.UseSqlite(connectionString);
+    
+    // En producción, asegurar que el directorio existe
+    if (builder.Environment.IsProduction())
+    {
+        var dbPath = connectionString.Replace("Data Source=", "");
+        var directory = Path.GetDirectoryName(dbPath);
+        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+    }
+});
 
 builder.Services.AddIdentity<Usuario, IdentityRole>(options => 
 {
@@ -39,12 +67,18 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Seed the database
+// Crear y migrar la base de datos automáticamente
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        
+        // Asegurar que la base de datos existe y está migrada
+        await context.Database.EnsureCreatedAsync();
+        
+        // Inicializar datos
         await SeedData.Initialize(services);
         // Crear usuario administrador
         await AdminSeeder.CreateAdminUser(services);
@@ -64,12 +98,20 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// En producción (Render), no usar HTTPS redirect ya que el proxy maneja SSL
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Health check endpoint para Docker/Render
+app.MapGet("/health", () => "OK");
 
 app.MapStaticAssets();
 
