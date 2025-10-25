@@ -1,0 +1,70 @@
+@{
+    ViewBag.Title = "Resultado del Pago";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        @if (ViewBag.Mensaje.Contains("aprobado") || ViewBag.Mensaje.Contains("éxito"))
+        {
+            <h1><i class="fas fa-check-circle text-success"></i> ¡Pago Exitoso!</h1>
+        }
+        else if (ViewBag.Mensaje.Contains("pendiente"))
+        {
+            <h1><i class="fas fa-clock text-warning"></i> Pago Pendiente</h1>
+        }
+        else
+        {
+            <h1><i class="fas fa-times-circle text-danger"></i> Pago No Completado</h1>
+        }
+    </div>
+</section>
+
+<!-- Result Section -->
+<section class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="membership-card result-card">
+                <div class="membership-body text-center">
+                    <div class="result-icon mb-4">
+                        @if (ViewBag.Mensaje.Contains("aprobado") || ViewBag.Mensaje.Contains("éxito"))
+                        {
+                            <i class="fas fa-check-circle fa-4x text-success"></i>
+                        }
+                        else if (ViewBag.Mensaje.Contains("pendiente"))
+                        {
+                            <i class="fas fa-clock fa-4x text-warning"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-times-circle fa-4x text-danger"></i>
+                        }
+                    </div>
+
+                    <h3 class="result-message mb-4">@ViewBag.Mensaje</h3>
+
+                    @if (ViewBag.Mensaje.Contains("aprobado") || ViewBag.Mensaje.Contains("éxito"))
+                    {
+                        <div class="success-info">
+                            <p>¡Bienvenido a tu nueva membresía!</p>
+                            <p class="text-muted">Puedes empezar a disfrutar de todo el contenido inmediatamente.</p>
+                        </div>
+                    }
+                    else if (ViewBag.Mensaje.Contains("pendiente"))
+                    {
+                        <p class="text-muted">Tu pago está siendo procesado. Te notificaremos cuando se complete.</p>
+                    }
+
+                    <div class="result-actions mt-4">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-danger btn-lg me-2">
+                            <i class="fas fa-home"></i> Ir al Inicio
+                        </a>
+                        <a href="@Url.Action("Index", "Membership")" class="btn btn-outline-danger btn-lg">
+                            <i class="fas fa-crown"></i> Ver Membresías
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

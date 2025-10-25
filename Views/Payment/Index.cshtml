@@ -1,0 +1,38 @@
+@{
+    ViewBag.Title = "Pago Mercado Pago";
+}
+@{
+    ViewBag.Title = "Procesando Pago";
+}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="membership-card">
+                <div class="membership-header">
+                    <i class="fas fa-spinner fa-spin payment-icon"></i>
+                    <h4>Procesando tu pago...</h4>
+                </div>
+                <div class="membership-body text-center">
+                    <p>Te estamos redirigiendo a Mercado Pago de forma segura.</p>
+                    <p class="text-muted">Si no eres redirigido automáticamente, haz clic en el botón abajo.</p>
+
+                    <form asp-action="Pay" method="post" class="mt-4">
+                        <input type="hidden" name="monto" value="@Context.Request.Query["monto"]" />
+                        <input type="hidden" name="membresiaNombre" value="@Context.Request.Query["membresiaNombre"]" />
+                        <input type="hidden" name="email" value="@Context.Request.Query["email"]" />
+
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fab fa-mercadopago"></i> Continuar con Mercado Pago
+                        </button>
+                    </form>
+
+                    <div class="mt-4">
+                        <a href="@Url.Action("Seleccionar", "Membership")" class="btn btn-outline-danger">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

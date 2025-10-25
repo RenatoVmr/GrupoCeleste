@@ -479,16 +479,252 @@ a:hover {
         text-align: center;
         gap: 1rem;
     }
-    
+
     .stat-content h3 {
         font-size: 2rem;
     }
-    
+
     .admin-actions {
         flex-direction: column;
     }
-    
+
     .admin-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* ===== Membership Cards ===== */
+.membership-card {
+    background: linear-gradient(135deg, var(--secondary-black) 0%, var(--tertiary-black) 100%);
+    border: 2px solid var(--primary-red);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.membership-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(220, 38, 38, 0.2);
+    border-color: var(--accent-red);
+}
+
+.membership-header {
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--hover-red) 100%);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    color: white;
+}
+
+.membership-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: white;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.membership-header h4 {
+    margin: 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.currency {
+    font-size: 1.2rem;
+    margin-right: 0.2rem;
+}
+
+.amount {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.period {
+    font-size: 1.2rem;
+    margin-left: 0.2rem;
+    opacity: 0.9;
+}
+
+.membership-body {
+    padding: 2rem 1.5rem;
+}
+
+.membership-body .description {
+    text-align: center;
+    color: var(--text-light-gray);
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.features li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    color: var(--text-gray);
+}
+
+.features li i {
+    color: var(--primary-red);
+    margin-right: 0.8rem;
+    width: 16px;
+}
+
+/* Selected Plan Styles */
+.selected-plan .membership-header {
+    background: linear-gradient(135deg, var(--hover-red) 0%, var(--primary-red) 100%);
+}
+
+.selected-plan-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.plan-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+}
+
+/* Payment Methods */
+.payment-methods {
+    margin-top: 2rem;
+}
+
+.payment-method-card {
+    background: var(--tertiary-black);
+    border: 1px solid var(--primary-red);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.payment-method-card.active {
+    border-color: var(--accent-red);
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+}
+
+.payment-method-card.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.payment-method-header {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    background: rgba(220, 38, 38, 0.1);
+}
+
+.payment-icon {
+    font-size: 2rem;
+    color: var(--primary-red);
+    margin-right: 1rem;
+}
+
+.payment-method-body {
+    padding: 1.5rem;
+}
+
+.form-label {
+    color: var(--text-gray);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    background-color: var(--secondary-black);
+    border: 1px solid var(--primary-red);
+    color: var(--text-gray);
+    padding: 0.8rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--accent-red);
+    box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25);
+    background-color: var(--secondary-black);
+    color: white;
+}
+
+.form-control::placeholder {
+    color: var(--text-light-gray);
+}
+
+/* Result Styles */
+.result-card {
+    text-align: center;
+}
+
+.result-icon {
+    margin: 2rem 0;
+}
+
+.result-message {
+    color: var(--text-gray);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.success-info {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.success-info p {
+    margin-bottom: 0.5rem;
+    color: var(--text-gray);
+}
+
+.result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .membership-header {
+        padding: 1.5rem 1rem;
+    }
+
+    .membership-icon {
+        font-size: 2.5rem;
+    }
+
+    .amount {
+        font-size: 2.5rem;
+    }
+
+    .membership-body {
+        padding: 1.5rem 1rem;
+    }
+
+    .result-actions {
+        flex-direction: column;
+    }
+
+    .result-actions .btn {
         width: 100%;
         margin-bottom: 0.5rem;
     }

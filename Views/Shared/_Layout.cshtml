@@ -40,6 +40,9 @@
                                 <i class="fas fa-envelope"></i> Contacto
                             </a>
                         </li>
+                           <li class="nav-item">
+                               <a class="nav-link text-dark" asp-area="" asp-controller="Membership" asp-action="Index">Membresía</a>
+                           </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">

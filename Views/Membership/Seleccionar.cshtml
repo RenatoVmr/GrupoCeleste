@@ -1,0 +1,80 @@
+@{
+    ViewBag.Title = "Seleccionar método de pago";
+    var membresiaId = Context.Request.Query["id"];
+    var membresiaNombre = Context.Request.Query["nombre"];
+    var membresiaPrecio = Context.Request.Query["precio"];
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1><i class="fas fa-credit-card"></i> Método de Pago</h1>
+        <p>Completa tu suscripción de forma segura</p>
+    </div>
+</section>
+
+<!-- Payment Selection -->
+<section class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="membership-card selected-plan">
+                <div class="membership-header">
+                    <h4>Plan Seleccionado</h4>
+                    <div class="selected-plan-info">
+                        <span class="plan-name">@membresiaNombre</span>
+                        <div class="price">
+                            <span class="currency">S/</span>
+                            <span class="amount">@membresiaPrecio</span>
+                            <span class="period">/mes</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="membership-body">
+                    <h5 class="mb-4"><i class="fas fa-wallet"></i> Elige tu método de pago</h5>
+
+                    <form asp-controller="Payment" asp-action="Index" method="get">
+                        <input type="hidden" name="monto" value="@membresiaPrecio" />
+                        <input type="hidden" name="membresiaNombre" value="@membresiaNombre" />
+
+                        <div class="payment-methods">
+                            <div class="payment-method-card active">
+                                <div class="payment-method-header">
+                                    <i class="fab fa-mercadopago payment-icon"></i>
+                                    <div>
+                                        <h6 class="mb-0">Mercado Pago</h6>
+                                        <small class="text-muted">Pago seguro con tarjeta o efectivo</small>
+                                    </div>
+                                </div>
+                                <div class="payment-method-body">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Email para el recibo:</label>
+                                        <input type="email" name="email" class="form-control" placeholder="tu@email.com" required />
+                                    </div>
+                                    <button type="submit" class="btn btn-danger btn-lg w-100">
+                                        <i class="fas fa-lock"></i> Pagar con Mercado Pago
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="payment-method-card disabled">
+                                <div class="payment-method-header">
+                                    <i class="fas fa-credit-card payment-icon"></i>
+                                    <div>
+                                        <h6 class="mb-0">Otros métodos</h6>
+                                        <small class="text-muted">Próximamente disponible</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("Index", "Membership")" class="btn btn-outline-danger">
+                            <i class="fas fa-arrow-left"></i> Cambiar Plan
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
