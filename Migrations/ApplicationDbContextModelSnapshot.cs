@@ -42,7 +42,9 @@ namespace GrupoCeleste.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Leido")
-                        .HasColumnType("INTEGER");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -50,6 +52,12 @@ namespace GrupoCeleste.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email");
+
+                    b.HasIndex("FechaEnvio");
+
+                    b.HasIndex("Leido");
 
                     b.ToTable("Mensajes");
                 });

@@ -75,11 +75,6 @@
                                     </a>
                                 }
                                 
-                                <a href="mailto:@mensaje.Email?subject=Re: @mensaje.Asunto" 
-                                   class="btn btn-primary btn-sm">
-                                    <i class="fas fa-reply"></i> Responder
-                                </a>
-                                
                                 <a href="@Url.Action("EliminarMensaje", new { id = mensaje.Id })" 
                                    class="btn btn-danger btn-sm"
                                    onclick="return confirm('¿Estás seguro de que quieres eliminar este mensaje?')">

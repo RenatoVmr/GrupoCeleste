@@ -11,14 +11,59 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GrupoCeleste.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251018233339_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251025041712_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
+
+            modelBuilder.Entity("GrupoCeleste.Models.Mensaje", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Asunto")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Contenido")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaEnvio")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Leido")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email");
+
+                    b.HasIndex("FechaEnvio");
+
+                    b.HasIndex("Leido");
+
+                    b.ToTable("Mensajes");
+                });
 
             modelBuilder.Entity("GrupoCeleste.Models.Pelicula", b =>
                 {

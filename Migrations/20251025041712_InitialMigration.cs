@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GrupoCeleste.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,6 +51,24 @@ namespace GrupoCeleste.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Mensajes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nombre = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Asunto = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Contenido = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
+                    FechaEnvio = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Leido = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Mensajes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -217,6 +235,21 @@ namespace GrupoCeleste.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Mensajes_Email",
+                table: "Mensajes",
+                column: "Email");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Mensajes_FechaEnvio",
+                table: "Mensajes",
+                column: "FechaEnvio");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Mensajes_Leido",
+                table: "Mensajes",
+                column: "Leido");
         }
 
         /// <inheritdoc />
@@ -236,6 +269,9 @@ namespace GrupoCeleste.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Mensajes");
 
             migrationBuilder.DropTable(
                 name: "Peliculas");
