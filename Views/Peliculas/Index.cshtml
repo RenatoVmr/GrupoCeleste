@@ -12,25 +12,34 @@
         </h1>
     </div>
 
-    <!-- Filtros por género -->
-    <div class="mb-4">
-        <div class="btn-group" role="group" aria-label="Géneros">
-            @{
-                var genres = ViewBag.Genres as List<string> ?? new List<string>();
-                var selected = ViewBag.SelectedGenre as string ?? string.Empty;
-            }
-            <a asp-action="Index" class="btn btn-sm @(string.IsNullOrEmpty(selected) ? "btn-primary" : "btn-outline-light")">Todos</a>
-            @foreach (var g in genres)
+    <!-- Barra de búsqueda y filtros por género (combinado) -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4 gap-3">
+        <form method="get" asp-action="Index" class="mb-3 mb-md-0">
+            <div class="input-group">
+                <input type="search" name="search" value="@ViewBag.SearchTerm" class="form-control" placeholder="Buscar por título o director..." />
+                <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+        </form>
+
+        <div>
+            <div class="btn-group" role="group" aria-label="Géneros">
+                @{
+                    var genres = ViewBag.Genres as IEnumerable<string> ?? new List<string>();
+                    var selected = ViewBag.SelectedGenre as string ?? string.Empty;
+                }
+                <a asp-action="Index" class="btn btn-sm @(string.IsNullOrEmpty(selected) ? "btn-primary" : "btn-outline-light")">Todos</a>
+                @foreach (var g in genres)
+                {
+                    var isActive = string.Equals(g, selected, StringComparison.OrdinalIgnoreCase);
+                    <a asp-action="Index" asp-route-genre="@g" class="btn btn-sm @(isActive ? "btn-primary" : "btn-outline-light")">@g</a>
+                }
+            </div>
+
+            @if (!string.IsNullOrEmpty((string)ViewBag.SelectedGenre))
             {
-                var isActive = string.Equals(g, selected, StringComparison.OrdinalIgnoreCase);
-                <a asp-action="Index" asp-route-genre="@g" class="btn btn-sm @(isActive ? "btn-primary" : "btn-outline-light")">@g</a>
+                <span class="badge bg-secondary ms-3">Género: @ViewBag.SelectedGenre</span>
             }
         </div>
-
-        @if (!string.IsNullOrEmpty((string)ViewBag.SelectedGenre))
-        {
-            <span class="badge bg-secondary ms-3">Género: @ViewBag.SelectedGenre</span>
-        }
     </div>
 
     <!-- Grid de Películas -->

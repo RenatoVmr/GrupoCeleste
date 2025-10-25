@@ -17,24 +17,44 @@ public class PeliculasController : Controller
     }
 
     // GET: /Peliculas
-    // Añadido parámetro opcional 'genre' para filtrar por género.
-    public async Task<IActionResult> Index(string? genre)
+    // Soporta búsqueda por título/director, filtrado por género y paginación
+    public async Task<IActionResult> Index(string? search, string? genre, int page = 1)
     {
+        const int pageSize = 12;
+
         var query = _context.Peliculas.AsQueryable();
 
-        if (!string.IsNullOrEmpty(genre))
+        if (!string.IsNullOrWhiteSpace(search))
         {
-            query = query.Where(p => p.Genero == genre);
+            var s = search.Trim();
+            // búsqueda case-insensitive y parcial
+            query = query.Where(p => EF.Functions.Like(p.Titulo.ToLower(), $"%{s.ToLower()}%")
+                                     || EF.Functions.Like(p.Director.ToLower(), $"%{s.ToLower()}%"));
         }
+
+        if (!string.IsNullOrWhiteSpace(genre))
+        {
+            query = query.Where(p => p.Genero.ToLower() == genre.ToLower());
+        }
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+        if (page < 1) page = 1;
+        if (page > totalPages && totalPages > 0) page = totalPages;
 
         var peliculas = await query
             .OrderByDescending(p => p.Calificacion)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
 
-        // Lista de géneros disponibles (botones/menú)
-        var genres = new List<string> { "Acción", "Drama", "Comedia", "Terror", "Romance", "Sci-Fi" };
-        ViewBag.Genres = genres;
+        // Datos para la vista
+        ViewBag.SearchTerm = search ?? string.Empty;
+        ViewBag.Genres = new List<string> { "Acción", "Drama", "Comedia", "Terror", "Romance", "Sci-Fi" };
         ViewBag.SelectedGenre = genre ?? string.Empty;
+        ViewBag.Page = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.PageSize = pageSize;
 
         return View(peliculas);
     }
