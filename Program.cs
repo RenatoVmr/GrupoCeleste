@@ -5,14 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuración de puerto para Render - método más directo
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
-
-// Limpiar configuración previa de puertos
-builder.Configuration["ASPNETCORE_URLS"] = $"http://0.0.0.0:{port}";
-builder.Configuration["HTTP_PORTS"] = "";
-builder.Configuration["HTTPS_PORTS"] = "";
+// Configuración de puerto solo para Render (producción)
+if (builder.Environment.IsProduction())
+{
+    var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+    
+    // Limpiar configuración previa de puertos
+    builder.Configuration["ASPNETCORE_URLS"] = $"http://0.0.0.0:{port}";
+    builder.Configuration["HTTP_PORTS"] = "";
+    builder.Configuration["HTTPS_PORTS"] = "";
+}
 
 // Configuración de archivos JSON opcionales
 builder.Configuration.AddJsonFile("appsettings.MercadoPago.json", optional: true, reloadOnChange: true);
