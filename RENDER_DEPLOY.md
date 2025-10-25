@@ -23,8 +23,9 @@ Configura estas variables de entorno en Render:
 ```bash
 # ASP.NET Core
 ASPNETCORE_ENVIRONMENT=Production
-ASPNETCORE_URLS=http://+:8080
-PORT=8080
+
+# Puerto (Render proporciona automáticamente esta variable)
+# PORT=10000 (automático por Render, no configurar manualmente)
 
 # Base de datos (SQLite persistente)
 DATABASE_URL=Data Source=/app/Data/GrupoCeleste.db
@@ -51,7 +52,7 @@ Para mantener la base de datos SQLite entre deployments:
 
 ### 4. Puerto y Networking
 
-- **Puerto interno**: 8080 (configurado en Dockerfile)
+- **Puerto interno**: Dinámico (usa variable PORT de Render)
 - **Puerto público**: Automático por Render
 - **Health Check**: `GET /health` (configurado en la aplicación)
 
@@ -60,7 +61,7 @@ Para mantener la base de datos SQLite entre deployments:
 ### Construcción local
 ```bash
 docker build -t grupoceleste .
-docker run -p 8080:8080 grupoceleste
+docker run -p 8080:8080 -e PORT=8080 grupoceleste
 ```
 
 ### Con docker-compose

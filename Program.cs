@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuración para Docker y producción
+// Usar el puerto que Render proporciona a través de la variable PORT
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(8080); // Puerto específico para Render
+    options.ListenAnyIP(int.Parse(port));
 });
 
 // Configuración de archivos JSON opcionales
