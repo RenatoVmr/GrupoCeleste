@@ -17,11 +17,28 @@ public class PeliculasController : Controller
     }
 
     // GET: /Peliculas
-    public async Task<IActionResult> Index()
+    // Implementa paginación simple mediante 'page' (1-based) y muestra 12 películas por página
+    public async Task<IActionResult> Index(int page = 1)
     {
-        var peliculas = await _context.Peliculas
+        const int pageSize = 12;
+
+        var query = _context.Peliculas.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        if (page < 1) page = 1;
+        if (page > totalPages && totalPages > 0) page = totalPages;
+
+        var peliculas = await query
             .OrderByDescending(p => p.Calificacion)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        ViewBag.Page = page;
+        ViewBag.TotalPages = totalPages;
+        ViewBag.PageSize = pageSize;
 
         return View(peliculas);
     }

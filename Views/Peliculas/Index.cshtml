@@ -90,3 +90,22 @@
         </div>
     </div>
 </section>
+
+<!-- Paginación -->
+@{
+    var page = ViewBag.Page as int? ?? 1;
+    var totalPages = ViewBag.TotalPages as int? ?? 1;
+}
+<nav aria-label="Paginación catálogo" class="container mb-5">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @(page <= 1 ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@(page - 1)">Anterior</a>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link">Página @(page) de @(totalPages)</span>
+        </li>
+        <li class="page-item @(page >= totalPages ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@(page + 1)">Siguiente</a>
+        </li>
+    </ul>
+</nav>
