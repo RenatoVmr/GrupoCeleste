@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: grupoceleste
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    branch: main
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: DATABASE_URL
+        value: Data Source=/app/Data/GrupoCeleste.db
+    disk:
+      name: data
+      mountPath: /app/Data
+      sizeGB: 1

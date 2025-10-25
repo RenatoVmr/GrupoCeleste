@@ -1,7 +1,6 @@
 # Usar la imagen oficial de .NET 9.0 para el runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
-EXPOSE $PORT
 
 # Usar la imagen del SDK para compilar
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
