@@ -12,6 +12,14 @@
         </h1>
     </div>
 
+    <!-- Barra de búsqueda -->
+    <form method="get" asp-action="Index" class="mb-3">
+        <div class="input-group">
+            <input type="search" name="search" value="@ViewBag.SearchTerm" class="form-control" placeholder="Buscar por título o director..." />
+            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Buscar</button>
+        </div>
+    </form>
+
     <!-- Grid de Películas -->
     <div class="row g-4">
         @if (Model != null && Model.Any())

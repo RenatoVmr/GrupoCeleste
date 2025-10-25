@@ -17,12 +17,22 @@ public class PeliculasController : Controller
     }
 
     // GET: /Peliculas
-    public async Task<IActionResult> Index()
+    // Soporta búsqueda por título o director mediante 'search' (query string)
+    public async Task<IActionResult> Index(string? search)
     {
-        var peliculas = await _context.Peliculas
+        var query = _context.Peliculas.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var s = search.Trim();
+            query = query.Where(p => p.Titulo.Contains(s) || p.Director.Contains(s));
+        }
+
+        var peliculas = await query
             .OrderByDescending(p => p.Calificacion)
             .ToListAsync();
 
+        ViewBag.SearchTerm = search ?? string.Empty;
         return View(peliculas);
     }
 
