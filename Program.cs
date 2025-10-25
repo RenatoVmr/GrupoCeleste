@@ -4,16 +4,41 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuración para Docker y producción
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080); // Puerto específico para Render
+});
+
+// Configuración de archivos JSON opcionales
 builder.Configuration.AddJsonFile("appsettings.MercadoPago.json", optional: true, reloadOnChange: true);
+
+// Configuración de servicios
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<GrupoCeleste.Services.MercadoPagoService>();
 
-// Add services to the container.
+// Configuración de base de datos
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? "Data Source=cineverse.db";
+    ?? Environment.GetEnvironmentVariable("DATABASE_URL")
+    ?? "Data Source=/app/Data/GrupoCeleste.db";
 
+// Configuración de base de datos con soporte para directorios
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+{
+    options.UseSqlite(connectionString);
+    
+    // En producción, asegurar que el directorio existe
+    if (builder.Environment.IsProduction())
+    {
+        var dbPath = connectionString.Replace("Data Source=", "");
+        var directory = Path.GetDirectoryName(dbPath);
+        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+    }
+});
 
 builder.Services.AddIdentity<Usuario, IdentityRole>(options => 
 {
@@ -64,12 +89,20 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// En producción (Render), no usar HTTPS redirect ya que el proxy maneja SSL
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Health check endpoint para Docker/Render
+app.MapGet("/health", () => "OK");
 
 app.MapStaticAssets();
 

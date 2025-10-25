@@ -1,0 +1,79 @@
+# .NET
+bin/
+obj/
+out/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+/build/
+.vs/
+
+# Archivos de desarrollo
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos de SO
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage
+.grunt
+
+# node_modules
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Base de datos local (para desarrollo)
+*.db
+*.db-shm
+*.db-wal
+
+# Archivos de Git
+.git/
+.gitignore
+README.md
+LICENSE
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Archivos de certificados de desarrollo
+*.pfx
+*.p12
+
+# Configuraciones locales
+appsettings.Development.json
+appsettings.Local.json
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
