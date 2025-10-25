@@ -64,43 +64,44 @@
 <section class="container my-5">
     <h2 class="section-title">
         <i class="fas fa-th"></i> Explora por Género
+        @if (!string.IsNullOrEmpty(ViewBag.GeneroSeleccionado))
+        {
+            <small class="ms-3">
+                <span class="badge bg-danger">Filtrado por: @ViewBag.GeneroSeleccionado</span>
+                <a asp-action="Index" class="btn btn-sm btn-outline-light ms-2">
+                    <i class="fas fa-times"></i> Limpiar
+                </a>
+            </small>
+        }
     </h2>
     <div class="row g-4 mt-3">
-        <div class="col-md-4 col-lg-2">
-            <div class="genre-card">
-                <i class="fas fa-fist-raised"></i>
-                <h5>Acción</h5>
+        @{
+            var iconos = new Dictionary<string, string> {
+                {"Acción", "fa-fist-raised"},
+                {"Drama", "fa-theater-masks"},
+                {"Comedia", "fa-laugh"},
+                {"Terror", "fa-ghost"},
+                {"Romance", "fa-heart"},
+                {"Sci-Fi", "fa-rocket"}
+            };
+        }
+        @foreach (var genero in (string[])ViewBag.Generos)
+        {
+            var isActive = genero == ViewBag.GeneroSeleccionado;
+            <div class="col-md-4 col-lg-2">
+                <a asp-action="Index" asp-route-genero="@genero" class="text-decoration-none">
+                    <div class="genre-card @(isActive ? "active" : "")">
+                        <i class="fas @(iconos[genero])"></i>
+                        <h5>@genero</h5>
+                        @if (Model.Count(p => p.Genero.ToLower() == genero.ToLower()) > 0)
+                        {
+                            <span class="badge bg-danger">
+                                @Model.Count(p => p.Genero.ToLower() == genero.ToLower())
+                            </span>
+                        }
+                    </div>
+                </a>
             </div>
-        </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="genre-card">
-                <i class="fas fa-theater-masks"></i>
-                <h5>Drama</h5>
-            </div>
-        </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="genre-card">
-                <i class="fas fa-laugh"></i>
-                <h5>Comedia</h5>
-            </div>
-        </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="genre-card">
-                <i class="fas fa-ghost"></i>
-                <h5>Terror</h5>
-            </div>
-        </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="genre-card">
-                <i class="fas fa-heart"></i>
-                <h5>Romance</h5>
-            </div>
-        </div>
-        <div class="col-md-4 col-lg-2">
-            <div class="genre-card">
-                <i class="fas fa-rocket"></i>
-                <h5>Sci-Fi</h5>
-            </div>
-        </div>
+        }
     </div>
 </section>

@@ -17,9 +17,21 @@ public class HomeController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? genero = null)
     {
-        var peliculas = await _context.Peliculas.ToListAsync();
+        var query = _context.Peliculas.AsQueryable();
+        
+        if (!string.IsNullOrWhiteSpace(genero))
+        {
+            query = query.Where(p => p.Genero.ToLower() == genero.ToLower());
+        }
+
+        var peliculas = await query.ToListAsync();
+        
+        // Lista de géneros para los botones
+        ViewBag.Generos = new[] { "Acción", "Drama", "Comedia", "Terror", "Romance", "Sci-Fi" };
+        ViewBag.GeneroSeleccionado = genero;
+        
         return View(peliculas);
     }
 
