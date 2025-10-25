@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.MercadoPago.json", optional: true, reloadOnChange: true);
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<GrupoCeleste.Services.MercadoPagoService>();
+builder.Services.AddSingleton<GrupoCeleste.Services.RecommendationService>();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
