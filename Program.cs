@@ -24,6 +24,7 @@ builder.Configuration.AddJsonFile("appsettings.MercadoPago.json", optional: true
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<GrupoCeleste.Services.MercadoPagoService>();
 builder.Services.AddSingleton<GrupoCeleste.Services.RecommendationService>();
+builder.Services.AddScoped<GrupoCeleste.Services.ChatbotService>();
 
 // Configuración de base de datos
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 

@@ -27,8 +27,22 @@ namespace GrupoCeleste.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var recommendations = _recommendationService.GetRecommendationsForUser(userEmail, _context);
-            return View(recommendations);
+            try
+            {
+                var recommendations = _recommendationService.GetRecommendationsForUser(userEmail, _context);
+                
+                if (recommendations == null || !recommendations.Any())
+                {
+                    ViewBag.Message = "No hay recomendaciones disponibles en este momento.";
+                }
+                
+                return View(recommendations);
+            }
+            catch (Exception)
+            {
+                ViewBag.Error = "Error al obtener recomendaciones. Intenta más tarde.";
+                return View(new List<Pelicula>());
+            }
         }
     }
 }

@@ -1,0 +1,442 @@
+/* Estilos del Chatbot para CineVerse */
+
+/* Botón flotante del chat */
+.chat-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #dc3545, #b02a37);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(220, 53, 69, 0.4);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    animation: pulse 2s infinite;
+}
+
+.chat-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(220, 53, 69, 0.6);
+}
+
+.chat-toggle i {
+    font-size: 24px;
+    color: white;
+}
+
+.chat-notification {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background: #000;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    animation: showNotification 3s ease-in-out 2s;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 4px 20px rgba(220, 53, 69, 0.4); }
+    50% { box-shadow: 0 4px 25px rgba(220, 53, 69, 0.6); }
+    100% { box-shadow: 0 4px 20px rgba(220, 53, 69, 0.4); }
+}
+
+@keyframes showNotification {
+    0%, 90%, 100% { opacity: 0; transform: translateY(10px); }
+    10%, 80% { opacity: 1; transform: translateY(0); }
+}
+
+/* Ventana del chat */
+.chat-window {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 380px;
+    height: 500px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    display: none;
+    flex-direction: column;
+    z-index: 1001;
+    overflow: hidden;
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.chat-window.open {
+    display: flex;
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Header del chat */
+.chat-header {
+    background: linear-gradient(135deg, #000, #333);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #dc3545;
+}
+
+.chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-header-info i {
+    font-size: 18px;
+    color: #dc3545;
+}
+
+.chat-header-info span {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.chat-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.chat-close:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+}
+
+.chat-close i {
+    font-size: 16px;
+}
+
+/* Área de mensajes */
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #f8f9fa;
+}
+
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #dc3545;
+    border-radius: 3px;
+}
+
+/* Mensajes */
+.message {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    animation: messageSlide 0.3s ease;
+}
+
+@keyframes messageSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bot-message .message-avatar {
+    background: linear-gradient(135deg, #dc3545, #b02a37);
+    color: white;
+}
+
+.user-message {
+    flex-direction: row-reverse;
+}
+
+.user-message .message-avatar {
+    background: #000;
+    color: white;
+}
+
+.message-content {
+    flex: 1;
+    background: white;
+    padding: 12px 16px;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    max-width: 250px;
+    word-wrap: break-word;
+    color: #333;
+}
+
+.user-message .message-content {
+    background: #dc3545;
+    color: white;
+}
+
+.message-time {
+    font-size: 11px;
+    color: #6c757d;
+    margin-top: 5px;
+    text-align: center;
+    min-width: 50px;
+    align-self: flex-end;
+}
+
+/* Indicador de escritura */
+.typing .message-content {
+    padding: 20px 16px;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #dc3545;
+    animation: typingDot 1.4s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typingDot {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Recomendaciones de películas */
+.movie-recommendations .message-content {
+    max-width: 300px;
+    padding: 16px;
+}
+
+.movies-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.movie-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    transition: transform 0.2s ease;
+}
+
+.movie-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.movie-card h4 {
+    color: #dc3545;
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.movie-genre {
+    color: #dc3545;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.movie-description {
+    color: #555;
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0 0 12px 0;
+}
+
+.movie-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #dc3545;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.movie-link:hover {
+    color: #b02a37;
+    text-decoration: none;
+}
+
+.movie-link i {
+    font-size: 10px;
+}
+
+/* Área de entrada */
+.chat-input-area {
+    padding: 15px 20px;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#chat-input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    padding: 12px 18px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#chat-input:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+#chat-send {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #dc3545, #b02a37);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+#chat-send:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 15px rgba(220, 53, 69, 0.4);
+}
+
+#chat-send:active {
+    transform: scale(0.95);
+}
+
+#chat-send i {
+    font-size: 16px;
+}
+
+/* Sugerencias rápidas */
+.quick-suggestions {
+    padding: 15px 20px 5px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.suggestions-title {
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.suggestions-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.suggestion-btn {
+    background: white;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.suggestion-btn:hover {
+    background: #dc3545;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .chat-window {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 40px);
+        bottom: 10px;
+        right: 10px;
+        border-radius: 10px;
+    }
+    
+    .chat-toggle {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+    }
+    
+    .chat-toggle i {
+        font-size: 22px;
+    }
+    
+    .chat-messages {
+        padding: 15px;
+    }
+    
+    .message-content {
+        max-width: calc(100% - 60px);
+    }
+    
+    .movie-recommendations .message-content {
+        max-width: calc(100% - 60px);
+    }
+}
