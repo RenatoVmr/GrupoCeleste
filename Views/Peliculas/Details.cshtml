@@ -1,7 +1,7 @@
-@model GrupoCeleste.Models.Pelicula
+@model GrupoCeleste.ViewModels.PeliculaDetailsViewModel
 
 @{
-    ViewData["Title"] = Model.Titulo;
+    ViewData["Title"] = Model.Pelicula.Titulo;
 }
 
 <div class="container my-5">
@@ -16,7 +16,7 @@
         <!-- Póster de la Película -->
         <div class="col-md-4 mb-4">
             <div class="movie-card">
-                <img src="@Model.ImagenUrl" alt="@Model.Titulo" class="w-100" style="height: auto; border-radius: 12px;" onerror="this.src='https://via.placeholder.com/500x750?text=Sin+Imagen'" />
+                <img src="@Model.Pelicula.ImagenUrl" alt="@Model.Pelicula.Titulo" class="w-100" style="height: auto; border-radius: 12px;" onerror="this.src='https://via.placeholder.com/500x750?text=Sin+Imagen'" />
             </div>
         </div>
 
@@ -24,19 +24,32 @@
         <div class="col-md-8">
             <div style="background-color: var(--secondary-black); padding: 2rem; border-radius: 12px; border: 2px solid var(--primary-red);">
                 <h1 style="color: white; font-weight: bold; margin-bottom: 1rem;">
-                    @Model.Titulo
+                    @Model.Pelicula.Titulo
                 </h1>
 
                 <div class="mb-3">
                     <span class="badge" style="background-color: var(--primary-red); font-size: 1rem; padding: 0.5rem 1rem;">
-                        <i class="fas fa-tag"></i> @Model.Genero
+                        <i class="fas fa-tag"></i> @Model.Pelicula.Genero
                     </span>
                 </div>
 
                 <div class="movie-rating mb-4" style="font-size: 1.5rem;">
                     <i class="fas fa-star"></i>
-                    <span style="font-weight: bold;">@Model.Calificacion</span>
-                    <small style="color: var(--text-light-gray);">/ 10</small>
+                    <span style="font-weight: bold;">
+                        @if (Model.TotalResenas > 0)
+                        {
+                            @Model.PromedioCalificaciones
+                        }
+                        else
+                        {
+                            @Model.Pelicula.Calificacion
+                        }
+                    </span>
+                    <small style="color: var(--text-light-gray);">/ 5</small>
+                    @if (Model.TotalResenas > 0)
+                    {
+                        <small style="color: var(--text-light-gray);">(@Model.TotalResenas @(Model.TotalResenas == 1 ? "reseña" : "reseñas"))</small>
+                    }
                 </div>
 
                 <div class="mb-4">
@@ -44,7 +57,7 @@
                         <i class="fas fa-align-left"></i> Descripción
                     </h5>
                     <p style="color: var(--text-gray); line-height: 1.8;">
-                        @Model.Descripcion
+                        @Model.Pelicula.Descripcion
                     </p>
                 </div>
 
@@ -53,13 +66,13 @@
                         <h6 style="color: var(--primary-red); font-weight: bold;">
                             <i class="fas fa-user-tie"></i> Director
                         </h6>
-                        <p style="color: var(--text-gray);">@Model.Director</p>
+                        <p style="color: var(--text-gray);">@Model.Pelicula.Director</p>
                     </div>
                     <div class="col-md-6 mb-3">
                         <h6 style="color: var(--primary-red); font-weight: bold;">
                             <i class="fas fa-users"></i> Actores
                         </h6>
-                        <p style="color: var(--text-gray);">@Model.Actores</p>
+                        <p style="color: var(--text-gray);">@Model.Pelicula.Actores</p>
                     </div>
                 </div>
 
@@ -68,19 +81,28 @@
                         <h6 style="color: var(--primary-red); font-weight: bold;">
                             <i class="fas fa-calendar-alt"></i> Año
                         </h6>
-                        <p style="color: var(--text-gray);">@Model.AnioLanzamiento</p>
+                        <p style="color: var(--text-gray);">@Model.Pelicula.AnioLanzamiento</p>
                     </div>
                     <div class="col-md-4 mb-3">
                         <h6 style="color: var(--primary-red); font-weight: bold;">
                             <i class="fas fa-clock"></i> Duración
                         </h6>
-                        <p style="color: var(--text-gray);">@Model.DuracionMinutos minutos</p>
+                        <p style="color: var(--text-gray);">@Model.Pelicula.DuracionMinutos minutos</p>
                     </div>
                     <div class="col-md-4 mb-3">
                         <h6 style="color: var(--primary-red); font-weight: bold;">
-                            <i class="fas fa-star"></i> Calificación
+                            <i class="fas fa-star"></i> Calificación Promedio
                         </h6>
-                        <p style="color: var(--text-gray);">@Model.Calificacion / 10</p>
+                        <p style="color: var(--text-gray);">
+                            @if (Model.TotalResenas > 0)
+                            {
+                                @Model.PromedioCalificaciones <text>/ 5</text>
+                            }
+                            else
+                            {
+                                <text>Sin reseñas aún</text>
+                            }
+                        </p>
                     </div>
                 </div>
 
@@ -90,9 +112,6 @@
                         <button class="btn btn-danger me-2">
                             <i class="fas fa-heart"></i> Agregar a Favoritos
                         </button>
-                        <button class="btn btn-outline-danger">
-                            <i class="fas fa-star"></i> Calificar
-                        </button>
                     </div>
                 }
                 else
@@ -100,10 +119,210 @@
                     <div class="alert alert-info mt-4" style="background-color: var(--tertiary-black); border-color: var(--primary-red); color: var(--text-gray);">
                         <i class="fas fa-info-circle"></i> 
                         <a asp-controller="Account" asp-action="Login" style="color: var(--primary-red); font-weight: bold;">Inicia sesión</a> 
-                        para agregar a favoritos y calificar esta película.
+                        para agregar a favoritos y escribir una reseña.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensajes de notificación -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: #155724; border-color: #c3e6cb; color: white;">
+                    <i class="fas fa-check-circle"></i> @TempData["Success"]
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #721c24; border-color: #f5c6cb; color: white;">
+                    <i class="fas fa-exclamation-triangle"></i> @TempData["Error"]
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Sección de Reseñas -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div style="background-color: var(--secondary-black); padding: 2rem; border-radius: 12px; border: 2px solid var(--primary-red);">
+                <h3 style="color: white; font-weight: bold; margin-bottom: 2rem;">
+                    <i class="fas fa-comments"></i> Reseñas de usuarios
+                    @if (Model.TotalResenas > 0)
+                    {
+                        <span style="color: var(--text-light-gray); font-size: 1rem;">(@Model.TotalResenas @(Model.TotalResenas == 1 ? "reseña" : "reseñas"))</span>
+                    }
+                </h3>
+
+                <!-- Formulario para nueva reseña -->
+                @if (Model.UsuarioPuedeResenar && Model.NuevaResena != null)
+                {
+                    <div class="mb-5" style="border: 1px solid var(--primary-red); border-radius: 8px; padding: 1.5rem; background-color: var(--tertiary-black);">
+                        <h5 style="color: var(--primary-red); margin-bottom: 1rem;">
+                            <i class="fas fa-pen"></i> Escribe tu reseña
+                        </h5>
+                        
+                        <form asp-controller="Peliculas" asp-action="CrearResena" method="post" id="resenaForm">
+                            <input type="hidden" name="PeliculaId" value="@Model.Pelicula.Id" />
+                            
+                            <div class="mb-3">
+                                <label for="Calificacion" class="form-label" style="color: white; font-weight: bold;">
+                                    <i class="fas fa-star"></i> Calificación (1-5 estrellas) *
+                                </label>
+                                <div class="star-rating mb-2">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <span class="star" data-rating="@i" style="font-size: 2rem; color: #666; cursor: pointer; margin-right: 0.25rem;">
+                                            <i class="far fa-star"></i>
+                                        </span>
+                                    }
+                                </div>
+                                <input type="hidden" name="Calificacion" id="calificacionInput" required />
+                                <div id="calificacion-error" class="text-danger" style="display: none;">Por favor, selecciona una calificación.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="Comentario" class="form-label" style="color: white; font-weight: bold;">
+                                    <i class="fas fa-comment"></i> Comentario
+                                </label>
+                                <textarea name="Comentario" class="form-control" rows="4" 
+                                          style="background-color: var(--tertiary-black); border: 1px solid #555; color: white;"
+                                          placeholder="Comparte tu opinión sobre esta película..." 
+                                          required minlength="10" maxlength="1000"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-paper-plane"></i> Publicar Reseña
+                            </button>
+                        </form>
+                    </div>
+                }
+                else if (Model.UsuarioYaReseno)
+                {
+                    <div class="alert alert-info mb-4" style="background-color: var(--tertiary-black); border-color: var(--primary-red); color: var(--text-gray);">
+                        <i class="fas fa-info-circle"></i> Ya has escrito una reseña para esta película.
+                    </div>
+                }
+                else if (!User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="alert alert-info mb-4" style="background-color: var(--tertiary-black); border-color: var(--primary-red); color: var(--text-gray);">
+                        <i class="fas fa-info-circle"></i> 
+                        <a asp-controller="Account" asp-action="Login" style="color: var(--primary-red); font-weight: bold;">Inicia sesión</a> 
+                        para escribir una reseña.
+                    </div>
+                }
+
+                <!-- Lista de reseñas existentes -->
+                @if (Model.Resenas.Any())
+                {
+                    <div class="resenas-lista">
+                        @foreach (var resena in Model.Resenas)
+                        {
+                            <div class="resena-item" style="border-bottom: 1px solid #444; padding: 1.5rem 0;">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 style="color: white; margin-bottom: 0.5rem; font-weight: bold;">
+                                            @resena.NombreUsuario
+                                        </h6>
+                                        <div class="resena-calificacion mb-2">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fas fa-star" style="color: @(i <= resena.Calificacion ? "var(--primary-red)" : "#666");"></i>
+                                            }
+                                            <span style="color: var(--text-light-gray); margin-left: 0.5rem;">
+                                                (@resena.Calificacion/5)
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <small style="color: var(--text-light-gray);">
+                                        @resena.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                                    </small>
+                                </div>
+                                <p style="color: var(--text-gray); line-height: 1.6; margin-bottom: 0;">
+                                    @resena.Comentario
+                                </p>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center" style="color: var(--text-light-gray); padding: 3rem 0;">
+                        <i class="fas fa-comments" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p style="font-size: 1.2rem;">Aún no hay reseñas para esta película.</p>
+                        <p>¡Sé el primero en compartir tu opinión!</p>
                     </div>
                 }
             </div>
         </div>
     </div>
 </div>
+
+<!-- JavaScript para el sistema de calificación con estrellas -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star');
+    const calificacionInput = document.getElementById('calificacionInput');
+    const calificacionError = document.getElementById('calificacion-error');
+    const resenaForm = document.getElementById('resenaForm');
+    let currentRating = 0;
+
+    // Sistema de estrellas
+    stars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+            currentRating = index + 1;
+            calificacionInput.value = currentRating;
+            calificacionError.style.display = 'none';
+            updateStars();
+        });
+
+        star.addEventListener('mouseenter', function() {
+            updateStars(index + 1);
+        });
+    });
+
+    const starRating = document.querySelector('.star-rating');
+    if (starRating) {
+        starRating.addEventListener('mouseleave', function() {
+            updateStars();
+        });
+    }
+
+    // Validación del formulario
+    if (resenaForm) {
+        resenaForm.addEventListener('submit', function(e) {
+            if (currentRating === 0) {
+                e.preventDefault();
+                calificacionError.style.display = 'block';
+                document.querySelector('.star-rating').scrollIntoView({ behavior: 'smooth' });
+                return false;
+            }
+        });
+    }
+
+    function updateStars(hoverRating = null) {
+        const rating = hoverRating || currentRating;
+        stars.forEach((star, index) => {
+            const icon = star.querySelector('i');
+            if (index < rating) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                star.style.color = 'var(--primary-red)';
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                star.style.color = '#666';
+            }
+        });
+    }
+});
+</script>
