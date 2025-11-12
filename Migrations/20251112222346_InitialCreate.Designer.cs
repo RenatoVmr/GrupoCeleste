@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GrupoCeleste.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251112203555_AgregarTablaResenas")]
-    partial class AgregarTablaResenas
+    [Migration("20251112222346_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

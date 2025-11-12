@@ -178,7 +178,7 @@ body {
 }
 
 .movie-card-body h5 {
-    color: white;
+    color: rgb(0, 0, 0);
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
